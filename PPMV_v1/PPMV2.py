@@ -91,8 +91,8 @@ if __name__=='__main__':
     #make menus
     QuickP_Xchoice_L=tk.Label(root,text='x axis')
     QuickP_Ychoice_L=tk.Label(root,text='y axis')
-    QuickP_Xchoice_D=tk.OptionMenu(root, Xchoice, 'Temperature (K)','Field (Oe)','theta (Oe)','Bridge1_R (ohms)','Bridge2_R (ohms)','Bridge3_R (ohms)')
-    QuickP_Ychoice_D=tk.OptionMenu(root, Ychoice, 'Temperature (K)','Field (Oe)','theta (Oe)','Bridge1_R (ohms)','Bridge2_R (ohms)','Bridge3_R (ohms)')
+    QuickP_Xchoice_D=tk.OptionMenu(root, Xchoice, 'Temperature (K)','Field (Oe)','theta (deg)','Bridge1_R (ohms)','Bridge2_R (ohms)','Bridge3_R (ohms)')
+    QuickP_Ychoice_D=tk.OptionMenu(root, Ychoice, 'Temperature (K)','Field (Oe)','theta (deg)','Bridge1_R (ohms)','Bridge2_R (ohms)','Bridge3_R (ohms)')
     
     #Simple File Output button
     Simple_file_B=tk.Button(root,text='Create Simple\nOutput',command=Button_QuickSave)

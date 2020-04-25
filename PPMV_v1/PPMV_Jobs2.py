@@ -48,9 +48,9 @@ def Read_PPMS_File(DAT_name,MachineType):
    #rename columns so that it is universal
    if MachineType==('9T-ACT' or '14t-ACT'):
        #skip bridge 3 for ACT pucks
-       data.columns=['Temperature (K)','Field (Oe)', 'Sample Orientation (deg)', 'Bridge1_R (ohms)','Bridge2_R (ohms)']
+       data.columns=['Temperature (K)','Field (Oe)', 'theta (deg)', 'Bridge1_R (ohms)','Bridge2_R (ohms)']
    else:
-       data.columns=['Temperature (K)','Field (Oe)', 'Sample Orientation (deg)', 'Bridge1_R (ohms)','Bridge2_R (ohms)','Bridge3_R (ohms)']
+       data.columns=['Temperature (K)','Field (Oe)', 'theta (deg)', 'Bridge1_R (ohms)','Bridge2_R (ohms)','Bridge3_R (ohms)']
        
    #fill all NaNs with zeros
    data.fillna(0, inplace=True)
@@ -96,7 +96,6 @@ def Job_QuickPlot(DAT_name,MachineType,Xaxis,Yaxis):
     Ydata=data[Yaxis]
     Yname=Yaxis
     
-    print(Ydata)
    
     plt.figure()
     plt.plot(Xdata,Ydata,'-')
