@@ -5,7 +5,7 @@ from tkinter import filedialog
 #Designer and Programer: John Collini
 #Front end design for PPMV (Physical Property Measurement Viewer)
 
-
+##specifically test lots of frames for design
     
 
 
@@ -24,10 +24,10 @@ def Button_LoadData():
     Load_check_E.insert(0,root.filename)
     
     #place widgets back on th screen after loading data
-    Load_check_L.grid(row=2,column=0,sticky=tk.E)
-    Load_check_E.grid(row=2,column=1)
+    Load_check_L.grid(row=2,column=0)
+    Load_check_E.grid(row=2,column=1,sticky=tk.W)
     Load_machine_L.grid(row=3,column=0,sticky=tk.E)
-    Load_machine_D.grid(row=3,column=1)
+    Load_machine_D.grid(row=3,column=1,sticky=tk.W)
 
     QuickP_B.grid(row=1,column=2,columnspan=2)
     QuickP_Xchoice_L.grid(row=2,column=2)
