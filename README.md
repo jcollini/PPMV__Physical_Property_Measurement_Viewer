@@ -13,7 +13,7 @@ NEEDED LIBRARIES:
 --scipy
 
 To use: 
-1.) run PPMV2.py using Python3 using a GUI or commandline. 
+1.) run PPMV#.py (where # is the highest number you use) using Python3 GUI or Commandline.
 	-->This brings up the PPMV GUI
 
 2.) load an uneditted (*.dat) file you have using the upper left button

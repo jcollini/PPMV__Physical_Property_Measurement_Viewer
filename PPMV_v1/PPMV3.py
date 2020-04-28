@@ -57,7 +57,7 @@ if __name__=='__main__':
     
 
 ####Load Frame
-    LoadFrame=tk.LabelFrame(root,text='Load PPMS Data',padx=300)
+    LoadFrame=tk.LabelFrame(root,text='Load PPMS Data',padx=205)
     LoadFrame.grid(row=1,column=0,padx=10,sticky=tk.W)
     #LoadFrame.grid_configure(ipadx=300)
     
@@ -85,7 +85,7 @@ if __name__=='__main__':
 ####Jobs Frame 
     JobsFrame=tk.LabelFrame(root,text='Jobs Frame')
     JobsFrame.grid(row=2,column=0,padx=10,pady=(0,10),sticky=tk.W)
-    JobsFrame.grid_configure(ipadx=330)
+    #JobsFrame.grid_configure(ipadx=85)
     
 ####quick plot frame and widges
     PlotFrame=tk.LabelFrame(JobsFrame,text='Plot Frame')
@@ -96,7 +96,7 @@ if __name__=='__main__':
     QuickP_icon.grid(row=0,column=0,columnspan=2)
     
     #plot explanation
-    QuickP_explain=tk.Label(PlotFrame,text='Plot your loaded data.\nPick x and y axis from menu')
+    QuickP_explain=tk.Label(PlotFrame,text='Plot your loaded data.\nPick x and y axis from menu.')
     QuickP_explain.grid(row=1,column=0,columnspan=2)
     
     #plot button
@@ -129,7 +129,7 @@ if __name__=='__main__':
     Export_icon=tk.Label(ExportFrame,text='***Export Icon***')
     Export_icon.grid(row=0,column=0)
     
-    Export_explain=tk.Label(ExportFrame,text='Export PPMS data \nto CSV')
+    Export_explain=tk.Label(ExportFrame,text='Export PPMS data \nto CSV.')
     Export_explain.grid(row=1,column=0)
     
     #Simple File Output button
@@ -137,8 +137,38 @@ if __name__=='__main__':
     Export_file_B.grid(row=2,column=0,pady=(60,5),padx=45)
     
     
+####Cooling and Warming Frame
+    CWFrame=tk.LabelFrame(JobsFrame,text='Cooling and Warming')
+    CWFrame.grid(row=0,column=2,padx=10,pady=10)
     
+    #explort icon and explanation
+    CW_icon=tk.Label(CWFrame,text='***CW Icon***')
+    CW_icon.grid(row=0,column=0)
     
+    CW_explain=tk.Label(CWFrame,text='Application for seperating \nand plotting cooling \nand warming curves')
+    CW_explain.grid(row=1,column=0)
+    
+    #Simple File Output button
+    CW_B=tk.Button(CWFrame,text='Cooling and Warming')
+    CW_B.grid(row=2,column=0,pady=(60,5),padx=32)
+    
+####Magnetoresistance Frame
+    MRFrame=tk.LabelFrame(JobsFrame,text='Magnetoresistance')
+    MRFrame.grid(row=0,column=3,padx=10,pady=10)
+    
+    #explort icon and explanation
+    MR_icon=tk.Label(MRFrame,text='***MR Icon***')
+    MR_icon.grid(row=0,column=0)
+    
+    MR_explain=tk.Label(MRFrame,text='Application for seperating \n and plotting \nmagnetoresistance curves')
+    MR_explain.grid(row=1,column=0)
+    
+    #Simple File Output button
+    MR_B=tk.Button(MRFrame,text='Magnetoresistance')
+    MR_B.grid(row=2,column=0,pady=(60,5),padx=32)
+    
+
+
     
     
     
