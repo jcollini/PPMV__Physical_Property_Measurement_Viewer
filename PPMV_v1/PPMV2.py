@@ -23,22 +23,7 @@ def Button_LoadData():
     Load_check_E.delete(0,tk.END)
     Load_check_E.insert(0,root.filename)
     
-    #place widgets back on th screen after loading data
-    Load_check_L.grid(row=2,column=0,sticky=tk.E)
-    Load_check_E.grid(row=2,column=1)
-    Load_machine_L.grid(row=3,column=0,sticky=tk.E)
-    Load_machine_D.grid(row=3,column=1)
-
-    QuickP_B.grid(row=1,column=2,columnspan=2)
-    QuickP_Xchoice_L.grid(row=2,column=2)
-    QuickP_Xchoice_D.grid(row=2,column=3,sticky=tk.W)
-    QuickP_Ychoice_L.grid(row=3,column=2)
-    QuickP_Ychoice_D.grid(row=3,column=3,sticky=tk.W)
-
-    Simple_file_B.grid(row=1,column=4,sticky=tk.W)
     
-    #place Jobs frame back on screen
-    JobsFrame.grid(row=4,column=1,columnspan=4)
 
 def Button_QuickPlot():
     #button for quick plot
