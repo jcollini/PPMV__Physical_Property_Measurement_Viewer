@@ -41,11 +41,16 @@ def Button_QuickSave():
     data.to_csv (export_file_path, index = False, header=True)
 
 if __name__=='__main__':
-  
-    root=tk.Tk()
+
+####General Settings
+    #General padding to have frames match
+    JobFrame_Ysize=56
+    #Padding if there is missing lines for the explaination text
+    LinePadding=12
+    
     
 ####Root window characteristics
-    
+    root=tk.Tk()
     root.title('Physical Property Measurement Viewer (PPMV)')
     root.iconbitmap('QMC_Temp.ico')
     
@@ -134,7 +139,7 @@ if __name__=='__main__':
     
     #Simple File Output button
     Export_file_B=tk.Button(ExportFrame,text='Export (.dat) data \n to (.csv)',command=Button_QuickSave)
-    Export_file_B.grid(row=2,column=0,pady=(60,5),padx=45)
+    Export_file_B.grid(row=2,column=0,pady=(JobFrame_Ysize,5),padx=45)
     
     
 ####Cooling and Warming Frame
@@ -150,7 +155,7 @@ if __name__=='__main__':
     
     #Simple File Output button
     CW_B=tk.Button(CWFrame,text='Cooling and Warming')
-    CW_B.grid(row=2,column=0,pady=(60,5),padx=32)
+    CW_B.grid(row=2,column=0,pady=(JobFrame_Ysize,5),padx=32)
     
 ####Magnetoresistance Frame
     MRFrame=tk.LabelFrame(JobsFrame,text='Magnetoresistance')
@@ -165,7 +170,41 @@ if __name__=='__main__':
     
     #Simple File Output button
     MR_B=tk.Button(MRFrame,text='Magnetoresistance')
-    MR_B.grid(row=2,column=0,pady=(60,5),padx=32)
+    MR_B.grid(row=2,column=0,pady=(JobFrame_Ysize,5),padx=32)
+    
+
+####Advanced Plot Frame
+    AdvPlotFrame=tk.LabelFrame(JobsFrame,text='Advanced Plotting')
+    AdvPlotFrame.grid(row=1,column=0,padx=10,pady=10)
+    
+    #explort icon and explanation
+    AdvPlot_icon=tk.Label(AdvPlotFrame,text='***Adv Plot Icon***')
+    AdvPlot_icon.grid(row=0,column=0)
+    
+    AdvPlot_explain=tk.Label(AdvPlotFrame,text='Application showing advanced \nplot settings for data\n')
+    AdvPlot_explain.grid(row=1,column=0)
+    
+    #Simple File Output button
+    AdvPlot_B=tk.Button(AdvPlotFrame,text='Advanced Plot')
+    AdvPlot_B.grid(row=2,column=0,pady=(JobFrame_Ysize,5),padx=32)
+    
+
+####Custom PPMS File Editor 
+    CustomFrame=tk.LabelFrame(JobsFrame,text='Customize PPMS File')
+    CustomFrame.grid(row=1,column=1,padx=10,pady=10)
+    
+    #explort icon and explanation
+    Custom_icon=tk.Label(CustomFrame,text='***Custom Icon***')
+    Custom_icon.grid(row=0,column=0)
+    
+    Custom_explain=tk.Label(CustomFrame,text='Application for editting \nand parsing PPMS data\n')
+    Custom_explain.grid(row=1,column=0)
+    
+    #Simple File Output button
+    Custom_B=tk.Button(CustomFrame,text='Advanced Plot')
+    Custom_B.grid(row=2,column=0,pady=(JobFrame_Ysize,5),padx=58)
+    
+
     
 
 
