@@ -195,19 +195,19 @@ if __name__=='__main__':
     
 
 ####Custom PPMS File Editor 
-    CustomFrame=tk.LabelFrame(JobsFrame,text='Customize PPMS File')
+    CustomFrame=tk.LabelFrame(JobsFrame,text='Parse PPMS File')
     CustomFrame.grid(row=1,column=1,padx=10,pady=10)
     
     #explort icon and explanation
-    Custom_icon=tk.Label(CustomFrame,text='***Custom Icon***')
+    Custom_icon=tk.Label(CustomFrame,text='***Parse Icon***')
     Custom_icon.grid(row=0,column=0)
     
     Custom_explain=tk.Label(CustomFrame,text='Application for editting \nand parsing PPMS data\n')
     Custom_explain.grid(row=1,column=0)
     
     #Simple File Output button
-    Custom_B=tk.Button(CustomFrame,text='Advanced Plot')
-    Custom_B.grid(row=2,column=0,pady=(JobFrame_Ysize,5),padx=58)
+    Custom_B=tk.Button(CustomFrame,text='Parse Data')
+    Custom_B.grid(row=2,column=0,pady=(JobFrame_Ysize,5),padx=70)
     
 
     
