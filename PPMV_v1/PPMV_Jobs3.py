@@ -2,9 +2,11 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
-import tkinter as tk
 from scipy.optimize import curve_fit
 from random import randint
+from matplotlib.figure import Figure
+from matplotlib.backends.backend_tkagg import (
+    FigureCanvasTkAgg, NavigationToolbar2Tk)
 
 
 ################################################################################
@@ -71,6 +73,25 @@ def Fill_Data(data):
     return data
 
 
+def Split_Sets_Index_Reversed(x_data,SplitVal,Reversal):
+    #Finds index where a parameter is reversed (say between a cool down and warm up)
+    xsize=len(x_data)
+    for i in range(xsize):
+        #find where index has been reversed. either 'down to up' or 'up to down'
+        difference=x_data[i+1]-x_data[i]
+        #print(difference)
+        if Reversal=='down to up':
+            if difference>SplitVal:
+                CutIndex=i
+                print(CutIndex)
+                break
+        else:
+            if difference<SplitVal:
+                CutIndex=i
+                break
+            
+    return CutIndex
+
 ################################################################################
 #############################Pre-Select Jobs####################################
 ################################################################################
@@ -106,4 +127,66 @@ def Job_QuickPlot(DAT_name,MachineType,Xaxis,Yaxis):
     plt.show()
     
 
+def Job_CWPlot(X1=np.NaN,Y1=np.NaN,X2=np.NaN,Y2=np.NaN,empty=False):
+    #test data
+    
+    #returns figures and axes needed for CW plot
+    #generate figure 
+    fig=Figure()
+    
+    #create subplot to plot inside of
+    CWPlot=fig.add_subplot(1,1,1)
+    #return empty plot if specified to
+    checkdata=np.array([X2,Y2])
+    print(type(checkdata))
+    if empty:
+        CWPlot.plot(np.NaN,np.NaN)
+    #if one of the lines is empty, give only one plot
+    elif pd.isnull(checkdata).all():
+        print('only have one plot')
+        CWPlot.plot(X1,Y1)
+    else:
+        CWPlot.plot(X1,Y1,'b',label='cool down')
+        CWPlot.plot(X2,Y2,'r',label='warm up')
+        CWPlot.legend(loc='best')
+        
+    #Adjust Plot Settings
+    CWPlot.tick_params(direction='in')
+    
+    
+    return fig,CWPlot
+
+
+def Job_CW_Split_Data(Xdata,Ydata): 
+    data=np.transpose([Xdata,Ydata])
+    print('shape of data is')
+    print(np.shape(data))
+    
+    SplitVals=0.1
+    
+    #Find index of split
+    Index=Split_Sets_Index_Reversed(Xdata,SplitVals,'down to up')
+    print('on split '+str(1))
+    print(Index)
+    
+    #split the whole set and save split, (save last one if you are on the last cycle)
+    data2=data[(Index+1):,:]
+    data1=data[0:(Index+1),:]
+    #saves new data for next cycle
+    data=data2
+    
+    print('data1 temp')
+    print(data1[0:5,0])
+    print('data2 temp')
+    print(data2[0:5,0])
+    
+    print('data1 shape is')
+    print(np.shape(data1))
+    
+    X1,Y1=data1[:,0],data1[:,1]
+    X2,Y2=data2[:,0],data2[:,1]
+    
+    return X1,Y1,X2,Y2
+    
+    
     

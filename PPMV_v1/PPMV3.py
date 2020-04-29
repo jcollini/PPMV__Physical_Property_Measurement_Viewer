@@ -1,7 +1,8 @@
 import tkinter as tk
-import matplotlib.pyplot as plt
-import PPMV_Jobs3 as ppmv
 from tkinter import filedialog
+
+import PPMV_Jobs3 as ppmv
+import Cooling_Warming as cw
 #Designer and Programer: John Collini
 #Front end design for PPMV (Physical Property Measurement Viewer)
 #Style is a LAUNCHER
@@ -39,6 +40,10 @@ def Button_QuickSave():
     export_file_path = filedialog.asksaveasfilename(defaultextension='.csv',filetypes=(('csv','*.csv'),('all files','*.*')))
                                     
     data.to_csv (export_file_path, index = False, header=True)
+    
+def Launch_CoolingWarming(DataLoc,MachineType):
+    #launches Cooling and Warming application
+    cw.App_CoolingWarming(DataLoc,MachineType)
 
 if __name__=='__main__':
 
@@ -154,7 +159,7 @@ if __name__=='__main__':
     CW_explain.grid(row=1,column=0)
     
     #Simple File Output button
-    CW_B=tk.Button(CWFrame,text='Cooling and Warming')
+    CW_B=tk.Button(CWFrame,text='Cooling and Warming',command=lambda: Launch_CoolingWarming(Load_check_E.get(),Machine.get()))
     CW_B.grid(row=2,column=0,pady=(JobFrame_Ysize,5),padx=32)
     
 ####Magnetoresistance Frame
