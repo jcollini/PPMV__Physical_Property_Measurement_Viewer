@@ -21,7 +21,6 @@ def Click_Radio(root,value,Old):
 
 
 def Update_ButtonPlot(DAT_name,MachineInfo,Xaxis,Yaxis,CW_Toggle,oldCanvas,root):
-    print('called me')
     #delete previous plot
     oldCanvas.get_tk_widget().grid_forget()
     
@@ -29,10 +28,10 @@ def Update_ButtonPlot(DAT_name,MachineInfo,Xaxis,Yaxis,CW_Toggle,oldCanvas,root)
     data=ppmv.Read_PPMS_File(DAT_name,MachineInfo)
     
     #Grab wanted axis anmes and data, convert to numpy
-    Xdata=data[Xaxis].to_numpy()
+    Xdata=data[Xaxis]
     Xname=Xaxis
         
-    Ydata=data[Yaxis].to_numpy()
+    Ydata=data[Yaxis]
     Yname=Yaxis
     
     #Plot data depending on toggle
@@ -80,7 +79,7 @@ def App_CoolingWarming(DataLoc,MachineType):
     
     #show load buttons and import load from the previous window
     #load data widgets
-    Load_B=tk.Button(LoadFrame,text="Load data",command=launcher.Button_LoadData)
+    Load_B=tk.Button(LoadFrame,text="Load data",command=lambda: launcher.Button_LoadData(Load_check_E,rootCW))
     Load_B.grid(row=0,column=0)
     
     Load_check_L=tk.Label(LoadFrame,text='File:')

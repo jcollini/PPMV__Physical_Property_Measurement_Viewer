@@ -12,17 +12,18 @@ import Cooling_Warming as cw
 
 
 #Needed Functions for buttons and selections
-def Button_LoadData():
-    #needed global variables
-    #global Load_check_E
+def Button_LoadData(FileTK,MasterTK):
     #button to grab datafile location
     #Start at desktop
     file_location='::{B4BFCC3A-DB2C-424C-B029-7FE99A87C641}'
-    root.filename=filedialog.askopenfilename(initialdir=file_location,title='Select a file',filetypes=(('PPMS files','*.dat'),('all files','*.*')))
+    MasterTK.filename=filedialog.askopenfilename(initialdir=file_location,title='Select a file',filetypes=(('PPMS files','*.dat'),('all files','*.*')))
     
     #update the entry with the new file. Clear it first
-    Load_check_E.delete(0,tk.END)
-    Load_check_E.insert(0,root.filename)
+    FileTK.delete(0,tk.END)
+    FileTK.insert(0,MasterTK.filename)
+    
+    #return new FileTK variable
+    return FileTK
     
 def Button_QuickPlot():
     #button for quick plot
@@ -73,7 +74,7 @@ if __name__=='__main__':
     
     #Widgets and placement
     #load data widgets
-    Load_B=tk.Button(LoadFrame,text="Load data",command=Button_LoadData)
+    Load_B=tk.Button(LoadFrame,text="Load data",command=lambda: Button_LoadData(Load_check_E,root))
     Load_B.grid(row=0,column=0)
     
     Load_check_L=tk.Label(LoadFrame,text='File:')
