@@ -12,18 +12,17 @@ import Cooling_Warming as cw
 
 
 #Needed Functions for buttons and selections
-def Button_LoadData(FileTK,MasterTK):
+def Button_LoadData(Load_EntryTK,MasterTK):
     #button to grab datafile location
     #Start at desktop
     file_location='::{B4BFCC3A-DB2C-424C-B029-7FE99A87C641}'
     MasterTK.filename=filedialog.askopenfilename(initialdir=file_location,title='Select a file',filetypes=(('PPMS files','*.dat'),('all files','*.*')))
     
     #update the entry with the new file. Clear it first
-    FileTK.delete(0,tk.END)
-    FileTK.insert(0,MasterTK.filename)
+    Load_EntryTK.delete(0,tk.END)
+    Load_EntryTK.insert(0,MasterTK.filename)
     
-    #return new FileTK variable
-    return FileTK
+    
     
 def Button_QuickPlot():
     #button for quick plot

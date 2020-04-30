@@ -8,6 +8,7 @@ from matplotlib.backends.backend_tkagg import (
     FigureCanvasTkAgg, NavigationToolbar2Tk)
 # Implement the default Matplotlib key bindings.
 from matplotlib.backend_bases import key_press_handler
+from tkinter import filedialog
 import numpy as np
 
 
@@ -20,7 +21,7 @@ def Click_Radio(root,value,Old):
 
 
 
-def Update_ButtonPlot(DAT_name,MachineInfo,Xaxis,Yaxis,CW_Toggle,oldCanvas,root):
+def Button_UpdatePlot(DAT_name,MachineInfo,Xaxis,Yaxis,CW_Toggle,oldCanvas,root):
     #delete previous plot
     oldCanvas.get_tk_widget().grid_forget()
     
@@ -40,8 +41,12 @@ def Update_ButtonPlot(DAT_name,MachineInfo,Xaxis,Yaxis,CW_Toggle,oldCanvas,root)
         X1,Y1,X2,Y2=ppmv.Job_CW_Split_Data(Xdata, Ydata)
         
         fig,CWPlot=ppmv.Job_CWPlot(X1,Y1,X2,Y2)
+        CWPlot.set_xlabel(Xname)
+        CWPlot.set_ylabel(Yname)
     else:
         fig,CWPlot=ppmv.Job_CWPlot(Xdata,Ydata)
+        CWPlot.set_xlabel(Xname)
+        CWPlot.set_ylabel(Yname)
         
     
     #Place plot onto screen
@@ -51,20 +56,61 @@ def Update_ButtonPlot(DAT_name,MachineInfo,Xaxis,Yaxis,CW_Toggle,oldCanvas,root)
     canvas.get_tk_widget().grid(row=2,column=1,columnspan=2)
     
         
-    #set plot to screen
-    #canvas=FigureCanvasTkAgg(fig,master=root)
-    #canvas.draw()
-    #canvas.get_tk_widget().grid(row=2,column=1,columnspan=2)
+    
+def Button_SaveFig(DAT_name,MachineInfo,Xaxis,Yaxis,CW_Toggle):
+    #Button to quickly save loaded file
+    
+    #Reamke current figure with the user settings
+    #Load data
+    data=ppmv.Read_PPMS_File(DAT_name,MachineInfo)
+    
+    #Grab wanted axis anmes and data, convert to numpy
+    Xdata=data[Xaxis]
+    Xname=Xaxis
+        
+    Ydata=data[Yaxis]
+    Yname=Yaxis
+    
+    #Plot data depending on toggle
+    if CW_Toggle:
+        #Split data
+        X1,Y1,X2,Y2=ppmv.Job_CW_Split_Data(Xdata, Ydata)
+        
+        fig,CWPlot=ppmv.Job_CWPlot(X1,Y1,X2,Y2)
+        CWPlot.set_xlabel(Xname)
+        CWPlot.set_ylabel(Yname)
+    else:
+        fig,CWPlot=ppmv.Job_CWPlot(Xdata,Ydata)
+        CWPlot.set_xlabel(Xname)
+        CWPlot.set_ylabel(Yname)
+    
+    #Grab the file location and name from the user
+    export_file_path = filedialog.asksaveasfilename(defaultextension='.png',filetypes=(('png','*.png'),('all files','*.*')))
+                                    
+    fig.savefig(export_file_path)
+    
+
+def Button_ExportCW_CSVs():
+    #example stuff
+    np.array([0,0])
+    
+
 
 
 def App_CoolingWarming(DataLoc,MachineType):
-    global canvas
     
     #controls the window for cooling and warming
     rootCW=tk.Toplevel()
     rootCW.title('PPMV Cooling and Warming')
     rootCW.iconbitmap('QMC_Temp.ico')
     
+    #Creare new variables to control DataLoc and MachineType
+    #Initialize each new variable with the previous setting
+    DataLocCW=tk.StringVar()
+    MachineTypeCW=tk.StringVar()
+    
+    DataLocCW.set(DataLoc)
+    MachineTypeCW.set(MachineType)
 
 
     
@@ -79,20 +125,20 @@ def App_CoolingWarming(DataLoc,MachineType):
     
     #show load buttons and import load from the previous window
     #load data widgets
-    Load_B=tk.Button(LoadFrame,text="Load data",command=lambda: launcher.Button_LoadData(Load_check_E,rootCW))
+    Load_B=tk.Button(LoadFrame,text="Load data",command=lambda: launcher.Button_LoadData(Load_check_ECW,rootCW))
     Load_B.grid(row=0,column=0)
     
     Load_check_L=tk.Label(LoadFrame,text='File:')
     Load_check_L.grid(row=0,column=1,padx=(20,0))
     
-    Load_check_E=tk.Entry(LoadFrame)
-    Load_check_E.grid(row=0,column=2)
+    Load_check_ECW=tk.Entry(LoadFrame)
+    Load_check_ECW.grid(row=0,column=2)
     #start with DataLoc from launcher
-    Load_check_E.insert(0,DataLoc)
+    Load_check_ECW.insert(0,DataLocCW.get())
     
     #machine selection for data
     Machine=tk.StringVar()
-    Machine.set(MachineType)
+    Machine.set(MachineTypeCW.get())
     
     Load_machine_L=tk.Label(LoadFrame,text='PPMS and Puck Used:')
     Load_machine_L.grid(row=0,column=3,padx=(20,0))
@@ -116,7 +162,11 @@ def App_CoolingWarming(DataLoc,MachineType):
     toolbar = NavigationToolbar2Tk(canvas, toolbarFrame)
     
     #create save button for plot
-    SaveFig_B=tk.Button(rootCW,text='Save Figure')
+    SaveFig_B=tk.Button(rootCW,text='Save Figure',command=lambda: Button_SaveFig(Load_check_ECW.get(),
+                                                                                  Machine.get(),
+                                                                                  Xchoice.get(),
+                                                                                  Ychoice.get(),
+                                                                                  v.get()))
     SaveFig_B.grid(row=4,column=1)
     
     #create export CVS button
@@ -164,14 +214,16 @@ def App_CoolingWarming(DataLoc,MachineType):
     #test label
     v=tk.BooleanVar()
     v.set(False)
-    RadioTest=tk.Label(SetFrame,text=str(v.get()))
-    RadioTest.grid(row=5,column=0)
+# =============================================================================
+#     RadioTest=tk.Label(SetFrame,text=str(v.get()))
+#     RadioTest.grid(row=5,column=0)
+# =============================================================================
     
 
-    RadioOff=tk.Radiobutton(SetFrame,text='off',variable=v, value=False,command=lambda: Click_Radio(SetFrame, str(v.get()),RadioTest))
+    RadioOff=tk.Radiobutton(SetFrame,text='off',variable=v, value=False)
     RadioOff.grid(row=3,column=1,sticky=tk.W)
     
-    RadioOn=tk.Radiobutton(SetFrame,text='on',variable=v, value=True,command=lambda: Click_Radio(SetFrame, str(v.get()),RadioTest))
+    RadioOn=tk.Radiobutton(SetFrame,text='on',variable=v, value=True)
     RadioOn.grid(row=4,column=1,sticky=tk.W)
     
     
@@ -180,11 +232,17 @@ def App_CoolingWarming(DataLoc,MachineType):
     
 ####Update Buttons
     #make update button for plot below settings settings
-    #Update_Bset=tk.Button(rootCW,text='Update Plot',command=lambda:Update_ButtonPlot(root,X1=np.NaN,Y1=np.NaN,X2=np.NaN,Y2=np.NaN) )
-    #Update_Bset.grid(row=3,column=0) 
+    Update_Bset=tk.Button(SetFrame,text='Update Plot',command=lambda:Button_UpdatePlot(Load_check_ECW.get(),
+                                                                                  Machine.get(),
+                                                                                  Xchoice.get(),
+                                                                                  Ychoice.get(),
+                                                                                  v.get(),
+                                                                                  canvas,
+                                                                                  rootCW))
+    Update_Bset.grid(row=5,column=0) 
     
     #make update button for plot
-    Update_B=tk.Button(rootCW,text='Update Plot',command=lambda:Update_ButtonPlot(Load_check_E.get(),
+    Update_B=tk.Button(rootCW,text='Update Plot',command=lambda:Button_UpdatePlot(Load_check_ECW.get(),
                                                                                   Machine.get(),
                                                                                   Xchoice.get(),
                                                                                   Ychoice.get(),
@@ -192,6 +250,7 @@ def App_CoolingWarming(DataLoc,MachineType):
                                                                                   canvas,
                                                                                   rootCW))
     Update_B.grid(row=3,column=2,sticky=tk.E)
+
     
     
     
