@@ -11,8 +11,19 @@ from matplotlib.backend_bases import key_press_handler
 from tkinter import filedialog
 import numpy as np
 
+def Temp_update(fig,ax,root,canvas):
+    #add title
+    ax.set_title('temp title')
+    
+    canvas.draw()
+    
 
 
+def Temp_save(fig):
+    #Grab the file location and name from the user
+    export_file_path = filedialog.asksaveasfilename(defaultextension='.png',filetypes=(('png','*.png'),('all files','*.*')))
+                                    
+    fig.savefig(export_file_path)
 
 def Click_Radio(root,value,Old):
     Old.grid_forget()
@@ -251,6 +262,8 @@ def App_CoolingWarming(DataLoc,MachineType):
                                                                                   rootCW))
     Update_B.grid(row=3,column=2,sticky=tk.E)
 
+    Update_temp=tk.Button(rootCW,text='temp title',command=lambda: Temp_update(fig,CWPlot,rootCW,canvas,))
+    Update_temp.grid(row=7,column=2)
     
     
     
