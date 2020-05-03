@@ -126,32 +126,7 @@ def Job_QuickPlot(DAT_name,MachineType,Xaxis,Yaxis):
     plt.show()
     
 
-def Job_CWPlot(X1=np.NaN,Y1=np.NaN,X2=np.NaN,Y2=np.NaN,empty=False):
-    #test data
-    
-    #returns figures and axes needed for CW plot
-    #generate figure 
-    fig=Figure()
-    
-    #create subplot to plot inside of
-    CWPlot=fig.add_subplot(1,1,1)
-    #return empty plot if specified to
-    checkdata=np.array([X2,Y2])
-    if empty:
-        CWPlot.plot(np.NaN,np.NaN)
-    #if one of the lines is empty, give only one plot
-    elif pd.isnull(checkdata).all():
-        CWPlot.plot(X1,Y1)
-    else:
-        CWPlot.plot(X1,Y1,'b',label='cool down')
-        CWPlot.plot(X2,Y2,'r',label='warm up')
-        CWPlot.legend(loc='best')
-        
-    #Adjust Plot Settings
-    CWPlot.tick_params(direction='in')
-    
-    
-    return fig,CWPlot
+
 
 
 def Job_CW_Split_Data(Xdata,Ydata):

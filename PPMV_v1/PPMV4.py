@@ -1,7 +1,7 @@
 import tkinter as tk
 
 import Button_Functions4 as bt
-import Cooling_Warming as cw
+import Cooling_Warming4 as cw
 #Designer and Programer: John Collini
 #Front end design for PPMV (Physical Property Measurement Viewer)
 #Style is a LAUNCHER
@@ -47,6 +47,7 @@ if __name__=='__main__':
     Load_check_L.grid(row=0,column=1,padx=(20,0))
     
     Load_check_E=tk.Entry(LoadFrame)
+    Load_check_E.insert(0, '') #empty string to initialize it
     Load_check_E.grid(row=0,column=2)
     
     #machine selection for data

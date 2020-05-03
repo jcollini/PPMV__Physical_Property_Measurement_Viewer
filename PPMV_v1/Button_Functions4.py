@@ -1,11 +1,13 @@
 import tkinter as tk
 
-
-from tkinter import filedialog
-
 import PPMV_Jobs4 as ppmv
 
-
+from matplotlib.figure import Figure
+from matplotlib.backends.backend_tkagg import (
+    FigureCanvasTkAgg, NavigationToolbar2Tk)
+# Implement the default Matplotlib key bindings.
+from matplotlib.backend_bases import key_press_handler
+from tkinter import filedialog
 #Modual for button functions in PPMV
 
 def Button_LoadData(MasterTK,Load_EntryTK):
@@ -51,13 +53,17 @@ def Button_QuickSave_CSV(Load_EntryTK,MachineTK):
 
 
 
-def Button_UpdatePlot(MasterTK,Fig_PLT,Load_EntryTK,MachineTK,XchoiceTK,YchoiceTK,CW_Toggle):
-    #clear original figure
-    Fig_PLT.clear()
+def Button_UpdatePlot(MasterTK,canvas_PLT,Plot_PLT,Load_EntryTK,MachineTK,XchoiceTK,YchoiceTK,CW_Toggle,empty=False):
+    #Updates figures for CW plots (potentially more?)
+    #
+    #New Variable types:
+    #Fig_PLT is a figure object from matplotlib.figure
+    #CW_Toggle is boolean which turns the cooling/warming seperation off and on
     
-    #create subplot to plot inside of cleared figure
-    Plot_PLT=Fig_PLT.add_subplot(1,1,1)
-    
+    #clear given plot
+    Plot_PLT.clear()
+    print(CW_Toggle.get())
+        
     #Load data
     data=ppmv.Read_PPMS_File(Load_EntryTK.get(),MachineTK.get())
     
@@ -69,18 +75,28 @@ def Button_UpdatePlot(MasterTK,Fig_PLT,Load_EntryTK,MachineTK,XchoiceTK,YchoiceT
     Yname=YchoiceTK.get()
     
     #Plot data depending on toggle
-    if CW_Toggle:
+    if CW_Toggle.get():
         #Split data
         X1,Y1,X2,Y2=ppmv.Job_CW_Split_Data(Xdata, Ydata)
         #overwrite original fig and plot with new split data
-        FIG_PLT,PlotPLT=ppmv.Job_CWPlot(X1,Y1,X2,Y2)
+        Plot_PLT.plot(X1,Y1,'b',label='cool down')
+        Plot_PLT.plot(X2,Y2,'r',label='warm up')
+        Plot_PLT.legend(loc='best')
         Plot_PLT.set_xlabel(Xname)
         Plot_PLT.set_ylabel(Yname)
     else:
         #overwrite original fig and plot with unsplit data
-        FIG_PLT,PlotPLT=ppmv.Job_CWPlot(X1,Y1,X2,Y2)
+        Plot_PLT.plot(Xdata,Ydata)
         Plot_PLT.set_xlabel(Xname)
         Plot_PLT.set_ylabel(Yname)
+        
+    
+    #redraw canvas with ticks inside
+    Plot_PLT.tick_params(direction='in')
+    
+    Plot_PLT.relim()
+    Plot_PLT.autoscale()
+    canvas_PLT.draw()
         
     
     
@@ -125,3 +141,14 @@ def Button_ExportCW_CSVs():
     #example stuff
     tk.Label()
     
+def Empty_Plot(MasterTK):
+    #creates a blank plot for use on a screen for a given Master
+    #generate figure 
+    fig=Figure()
+    
+    ax=fig.add_subplot()
+    canvas=FigureCanvasTkAgg(fig,master=MasterTK)
+    canvas.draw()
+    
+    
+    return canvas,fig,ax

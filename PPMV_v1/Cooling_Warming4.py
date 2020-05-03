@@ -15,18 +15,15 @@ from matplotlib.backend_bases import key_press_handler
 
 def App_CoolingWarming(DataLoc,MachineType):
     
+   
     #controls the window for cooling and warming
     rootCW=tk.Toplevel()
     rootCW.title('PPMV Cooling and Warming')
     rootCW.iconbitmap('QMC_Temp.ico')
     
-    #Creare new variables to control DataLoc and MachineType
-    #Initialize each new variable with the previous setting
-    Load_check_E=tk.Entry(rootCW)
-    Load_check_E.insert(0,DataLoc)
-    Machine=tk.StringVar()
+  
     
-    Load_check_E.set(DataLoc)
+    Machine=tk.StringVar()
     Machine.set(MachineType)
 
 
@@ -48,11 +45,13 @@ def App_CoolingWarming(DataLoc,MachineType):
     Load_check_L=tk.Label(LoadFrame,text='File:')
     Load_check_L.grid(row=0,column=1,padx=(20,0))
     
-    #Already loaded entry from launcher. Simply place on screen
+    #Already loaded entry from launcher. Simply place on screen. Load info from launcher
+    Load_check_E=tk.Entry(LoadFrame)
+    Load_check_E.insert(0,DataLoc)
     Load_check_E.grid(row=0,column=2)
     
-    
-
+    Machine=tk.StringVar()
+    Machine.set(MachineType)
     
     Load_machine_L=tk.Label(LoadFrame,text='PPMS and Puck Used:')
     Load_machine_L.grid(row=0,column=3,padx=(20,0))
@@ -63,17 +62,15 @@ def App_CoolingWarming(DataLoc,MachineType):
     
 ####Plotting
     #create plot and put on screen. Have it empty to start
-    #make plot 
-    fig,CWPlot=ppmv.Job_CWPlot(empty=True)
+    canvas,fig,CWPlot=bt.Empty_Plot(rootCW)
     #set plot to screen
-    canvas=FigureCanvasTkAgg(fig,master=rootCW)
-    canvas.draw()
     canvas.get_tk_widget().grid(row=2,column=1,columnspan=2)
     
     #set toolbar and post to window
     toolbarFrame = tk.Frame(rootCW)
     toolbarFrame.grid(row=3,column=1,columnspan=2)
     toolbar = NavigationToolbar2Tk(canvas, toolbarFrame)
+    
     
     #create save button for plot
     SaveFig_B=tk.Button(rootCW,text='Save Figure',command=lambda: bt.Button_SaveFig(Load_check_E, Machine, Xchoice, Ychoice, CW_Toggle))
@@ -139,7 +136,8 @@ def App_CoolingWarming(DataLoc,MachineType):
 ####Update Buttons
     #make update button for plot below settings settings
     Update_Bset=tk.Button(SetFrame,text='Update Plot',command=lambda:bt.Button_UpdatePlot(rootCW, 
-                                                                                          fig, 
+                                                                                          canvas,
+                                                                                          CWPlot,
                                                                                           Load_check_E, 
                                                                                           Machine, 
                                                                                           Xchoice, 
@@ -149,7 +147,8 @@ def App_CoolingWarming(DataLoc,MachineType):
     
     #make update button for plot
     Update_B=tk.Button(rootCW,text='Update Plot',command=lambda:bt.Button_UpdatePlot(rootCW, 
-                                                                                     fig, 
+                                                                                     canvas,
+                                                                                     CWPlot, 
                                                                                      Load_check_E, 
                                                                                      Machine, 
                                                                                      Xchoice, 
