@@ -91,6 +91,17 @@ def Split_Sets_Index_Reversed(x_data,SplitVal,Reversal):
             
     return CutIndex
 
+def DetermineDirection(x_data):
+    #determins first direction of a given data that has reversals
+    x_dir=x_data.iloc[0]-x_data.iloc[25]
+    if x_dir>0:
+        direction='down to up'
+    elif x_dir<0:
+        direction='up to down'
+    else:
+        print('Error: data is not changing direction')
+    return direction
+
 ################################################################################
 #############################Pre-Select Jobs####################################
 ################################################################################
@@ -135,8 +146,12 @@ def Job_CW_Split_Data(Xdata,Ydata):
     
     SplitVals=0.1
     
+    #determine direction of data
+    direction=DetermineDirection(Xdata)
+    print(direction)
+    
     #Find index of split
-    Index=Split_Sets_Index_Reversed(Xdata,SplitVals,'down to up')
+    Index=Split_Sets_Index_Reversed(Xdata,SplitVals,direction)
     
     
     #split the whole set and save split, (save last one if you are on the last cycle)
@@ -157,5 +172,6 @@ def Job_CW_Split_Data(Xdata,Ydata):
     
     return X1,Y1,X2,Y2
     
-    
+
+
     

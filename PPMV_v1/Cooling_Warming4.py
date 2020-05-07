@@ -83,7 +83,12 @@ def App_CoolingWarming(DataLoc,MachineType):
     SaveFig_B.grid(row=0,column=0,padx=(ExportBoarderX,ExportPadding),pady=ExportBoarderY)
     
     #create export CVS button
-    Export_B=tk.Button(ExportFrame,text='Save Seperate CSVs')
+    Export_B=tk.Button(ExportFrame,text='Save Seperate CSVs',command=lambda: bt.Button_ExportCW_CSVs(rootCW, 
+                                                                                                     Load_check_E, 
+                                                                                                     Machine, 
+                                                                                                     Xchoice, 
+                                                                                                     Ychoice, 
+                                                                                                     CW_Toggle))
     Export_B.grid(row=0,column=1,padx=(ExportPadding,ExportBoarderX),pady=ExportBoarderY)
     
     
