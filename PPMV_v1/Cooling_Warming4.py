@@ -24,7 +24,8 @@ def App_CoolingWarming(DataLoc,MachineType):
     rootCW=tk.Toplevel()
     rootCW.title('PPMV Cooling and Warming')
     rootCW.iconbitmap('QMC_Temp.ico')
-    
+    #rootCW.grab_set() #places this window as a priority for events
+    #rootCW.focus_displayof()
   
     
     Machine=tk.StringVar()
