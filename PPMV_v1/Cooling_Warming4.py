@@ -14,7 +14,11 @@ from matplotlib.backend_bases import key_press_handler
 
 
 def App_CoolingWarming(DataLoc,MachineType):
-    
+    #general settings
+    ExportPadding=50 #seperation of export buttons
+    ExportBoarderX=20 #boarder space around export buttons
+    ExportBoarderY=5 #boarder space around export buttons
+    ExFrameY=5 #boarder space around export frame
    
     #controls the window for cooling and warming
     rootCW=tk.Toplevel()
@@ -34,7 +38,7 @@ def App_CoolingWarming(DataLoc,MachineType):
     
 ####Load Frame
     LoadFrame=tk.LabelFrame(rootCW,text='Check/Change Loaded Data')
-    LoadFrame.grid(row=1,column=0,padx=10,sticky=tk.W)
+    LoadFrame.grid(row=1,column=0,padx=10,pady=ExFrameY,sticky=tk.W)
     #LoadFrame.grid_configure(ipadx=300)
     
     #show load buttons and import load from the previous window
@@ -71,14 +75,16 @@ def App_CoolingWarming(DataLoc,MachineType):
     toolbarFrame.grid(row=3,column=1,columnspan=2)
     toolbar = NavigationToolbar2Tk(canvas, toolbarFrame)
     
-    
+####Save/Export frame
+    ExportFrame=tk.LabelFrame(rootCW,text='Save/Export')
+    ExportFrame.grid(row=1,column=1,columnspan=2,pady=ExFrameY)    
     #create save button for plot
-    SaveFig_B=tk.Button(rootCW,text='Save Figure',command=lambda: bt.Button_SaveFig(Load_check_E, Machine, Xchoice, Ychoice, CW_Toggle))
-    SaveFig_B.grid(row=4,column=1)
+    SaveFig_B=tk.Button(ExportFrame,text='Save Figure',command=lambda: bt.Button_SaveFig(fig))
+    SaveFig_B.grid(row=0,column=0,padx=(ExportBoarderX,ExportPadding),pady=ExportBoarderY)
     
     #create export CVS button
-    Export_B=tk.Button(rootCW,text='Save Seperate CSVs')
-    Export_B.grid(row=4,column=2)
+    Export_B=tk.Button(ExportFrame,text='Save Seperate CSVs')
+    Export_B.grid(row=0,column=1,padx=(ExportPadding,ExportBoarderX),pady=ExportBoarderY)
     
     
    

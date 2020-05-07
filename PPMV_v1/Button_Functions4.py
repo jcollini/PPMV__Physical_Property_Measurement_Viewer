@@ -50,7 +50,9 @@ def Button_QuickSave_CSV(Load_EntryTK,MachineTK):
                                     
     data.to_csv (export_file_path, index = False, header=True)
     
-
+def Button_ExportCW_CSVs():
+    #example stuff
+    tk.Label()
 
 
 def Button_UpdatePlot(MasterTK,canvas_PLT,Plot_PLT,Load_EntryTK,MachineTK,XchoiceTK,YchoiceTK,CW_Toggle,empty=False):
@@ -103,43 +105,15 @@ def Button_UpdatePlot(MasterTK,canvas_PLT,Plot_PLT,Load_EntryTK,MachineTK,Xchoic
     
         
     
-def Button_SaveFig(Load_EntryTK,MachineTK,XchoiceTK,YchoiceTK,CW_Toggle):
-    #Button to quickly save loaded file
+def Button_SaveFig(Fig_PLT):
     
-    #Reamke current figure with the user settings
-    #Load data
-    data=ppmv.Read_PPMS_File(Load_EntryTK.get(),MachineTK.get())
-    
-    #Grab wanted axis anmes and data, convert to numpy
-    Xdata=data[XchoiceTK.get()]
-    Xname=XchoiceTK.get()
-        
-    Ydata=data[YchoiceTK.get()]
-    Yname=XchoiceTK.get()
-    
-    #Plot data depending on toggle
-    if CW_Toggle:
-        #Split data
-        X1,Y1,X2,Y2=ppmv.Job_CW_Split_Data(Xdata, Ydata)
-        #plot all data
-        fig,CWPlot=ppmv.Job_CWPlot(X1,Y1,X2,Y2)
-        CWPlot.set_xlabel(Xname)
-        CWPlot.set_ylabel(Yname)
-    else:
-        #Plot just the original data
-        fig,CWPlot=ppmv.Job_CWPlot(Xdata,Ydata)
-        CWPlot.set_xlabel(Xname)
-        CWPlot.set_ylabel(Yname)
     
     #Grab the file location and name from the user
     export_file_path = filedialog.asksaveasfilename(defaultextension='.png',filetypes=(('png','*.png'),('all files','*.*')))
                                     
-    fig.savefig(export_file_path)
+    Fig_PLT.savefig(export_file_path)
     
 
-def Button_ExportCW_CSVs():
-    #example stuff
-    tk.Label()
     
 def Empty_Plot(MasterTK):
     #creates a blank plot for use on a screen for a given Master
