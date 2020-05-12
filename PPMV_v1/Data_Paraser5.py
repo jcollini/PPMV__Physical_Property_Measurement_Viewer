@@ -42,21 +42,49 @@ def Add_Parse_Section(MasterTK,RowTK,DP_Label_ref,DP_Method_ref):
     Divider_Label.grid(row=row,column=1)
     Divider_Method.grid(row=row,column=2)
     
-    #update lists
+    #update lists of widgets
     DP_Label_ref.append(DataLabel)
     DP_Method_ref.append(Method)
     
     #update row number
     RowTK.set(row+1)
     
-def Button_UpdatePlotDP(canvas_PLT,Plot_PLT,Data_CL,DP_Label_ref,DP_Method_ref,XchoiceTK,YchoiceTK):
+def Button_UpdatePlotDP(canvas_PLT,Plot_PLT,Data_CL,XchoiceTK,YchoiceTK,DP_Label_ref,DP_Method_ref):
     #clear current plot
     Plot_PLT.clear()
     
     #use dividers, if avaliable
     if DP_Label_ref:
-        #add divider code here
-        testing=[]
+        #reset parse lists
+        Data_CL.reset_parse()
+        
+        #add current lists of methods and labels to data class
+        Data_CL.add_parse(DP_Label_ref, DP_Method_ref)
+        print(Data_CL.parse_labels)
+        
+        #run class method to parseData with current info
+        Data_CL.parseData()
+        
+        #Plot Individual Data Sections
+        plotNum=len(DP_Label_ref)+1
+        for i in range(plotNum):
+            print(i)
+            data=Data_CL.data_sections[i]
+            
+            #grab needed data
+            Xdata=data[XchoiceTK.get()]
+            Xname=XchoiceTK.get()
+        
+            Ydata=data[YchoiceTK.get()]
+            Yname=YchoiceTK.get()
+        
+            Plot_PLT.plot(Xdata,Ydata,label='Section '+str(i+1)+': '+Data_CL.parse_results[i])
+            Plot_PLT.set_xlabel(Xname)
+            Plot_PLT.set_ylabel(Yname)
+            Plot_PLT.legend(loc='best')
+                
+            
+            
     else:
         #otherwise, just plot the data as is
         data=Data_CL.data
@@ -175,10 +203,10 @@ def App_DataParaser(DataLoc,MachineType):
     Update_B=tk.Button(PlotFrame,text='Update Plot',command=lambda: Button_UpdatePlotDP(canvas, 
                                                                                         axis, 
                                                                                         Data, 
-                                                                                        Labels_ref, 
-                                                                                        Methods_ref, 
                                                                                         Xchoice, 
-                                                                                        Ychoice))
+                                                                                        Ychoice,
+                                                                                        Labels_ref,
+                                                                                        Methods_ref))
     
     Update_B.grid(row=0,column=2,rowspan=2)
     

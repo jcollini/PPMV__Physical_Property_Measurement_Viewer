@@ -25,8 +25,12 @@ class PPMSData():
         #Shift_Direction -- values change direction from neg to pos or vice verse
         #Shift_Dynamic -- values change from constant value to a changing value or vice versa
         
-        #list continating absolute split value changes
-        self.parse_values=[]
+        self.parse_results=[]
+        #Results (outcome of Methods)
+        #Neg to Pos
+        #Pos to Neg
+        #Static to Dynamic
+        #Dynamic to Static
         
         #list containing parsed pandas dataframes
         self.data_indexcuts=[]
@@ -38,18 +42,29 @@ class PPMSData():
         
     
     #definition for adding cuts
-    def add_parse(self,label,method,splitvalue):
-        self.parse_labels.append(label)
-        self.parse_methods.append(method)
-        self.parse_values.append(splitvalue)
+    def add_parse(self,labelsTK,methodsTK):
+        dividerNum=len(labelsTK)
+        for i in range(dividerNum):
+            self.parse_labels.append(labelsTK[i].get())
+            self.parse_methods.append(methodsTK[i].get())
+            
+    def reset_parse(self):
+        #resets the parse lists
+        self.parse_labels=[]
+        self.parse_methods=[]
+        self.parse_results=[]
         
-    def method_Shift_Direction(data,label,splitvalue):
+        
+    def method_Shift_Direction(self,data,label):
+        splitvalue=0.1
+        
         #using the label, grab the column of data used to split
         Xdata=data[label]
         
         #determine current direction of data
         direction=ppmv.DetermineDirection(Xdata)
         print(direction)
+        self.parse_results.append(direction)
         
         #Find index of split
         Index=ppmv.Split_Sets_Index_Reversed(Xdata,splitvalue,direction)
@@ -70,26 +85,34 @@ class PPMSData():
         
     #definition for creating parsed data based on loaded
     def parseData(self):
-        #for each added parse instruction, parse the data. Subtract 1 to save the remaining data for last
-        ParseLength=len(self.parse_labels)-1
+        #for each added parse instruction, parse the data. 
+        ParseLength=len(self.parse_labels)
         data=self.data #grab a copy of the original data to manipulate
         
         for i in range(ParseLength):
             #pick method and parse
             if self.parse_methods[i]=='Shift_Direction':
-                index,data1,data2=self.method_Shift_Direction(data,self.parse_labels[i],self.parse_values[i])
+                index,data1,data2=self.method_Shift_Direction(data,self.parse_labels[i])
                 #now return the cut data set and index
                 #also make data2 the new data for the next turn in the loop
                 self.data_sections.append(data1)
                 self.data_indexcuts.append(index)
                 data=data2 #remaining dataset for the next cycle
             
-            if self.parse_method[i]=='Shift_Dynamic':
+            if self.parse_methods[i]=='Shift_Dynamic':
                 #method goes here
                 print('this method not ready yet')
         
         #after loop is done, add remaining dataset to the last dataset section
         self.data_sections.append(data)
+        
+        #add last label depending on last result
+        if self.parse_methods[-1]=='Shift_Direction':
+            #determine direction of last dataset and add it to results
+            splitval=0.1
+            direction=ppmv.DetermineDirection(self.data_sections[-1])
+            print(direction)
+            self.parse_results.append(direction)
                 
                 
                 
