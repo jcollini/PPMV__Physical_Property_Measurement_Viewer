@@ -2,6 +2,7 @@ import tkinter as tk
 
 import Button_Functions4 as bt
 import Cooling_Warming4 as cw
+import Data_Paraser4 as dp
 #Designer and Programer: John Collini
 #Front end design for PPMV (Physical Property Measurement Viewer)
 #Style is a LAUNCHER
@@ -97,9 +98,19 @@ if __name__=='__main__':
     QuickP_Ychoice_L=tk.Label(PlotFrame,text='y axis')
     QuickP_Ychoice_L.grid(row=4,column=0,pady=(0,5))
    
-    QuickP_Xchoice_D=tk.OptionMenu(PlotFrame, Xchoice, 'Temperature (K)','Field (Oe)','theta (deg)','Bridge1_R (ohms)','Bridge2_R (ohms)','Bridge3_R (ohms)')
+    QuickP_Xchoice_D=tk.OptionMenu(PlotFrame, Xchoice, 'Temperature (K)',
+                                   'Field (Oe)',
+                                   'theta (deg)',
+                                   'Bridge1_R (ohms)',
+                                   'Bridge2_R (ohms)',
+                                   'Bridge3_R (ohms)')
     QuickP_Xchoice_D.grid(row=3,column=1)
-    QuickP_Ychoice_D=tk.OptionMenu(PlotFrame, Ychoice, 'Temperature (K)','Field (Oe)','theta (deg)','Bridge1_R (ohms)','Bridge2_R (ohms)','Bridge3_R (ohms)')
+    QuickP_Ychoice_D=tk.OptionMenu(PlotFrame, Ychoice, 'Temperature (K)',
+                                   'Field (Oe)',
+                                   'theta (deg)',
+                                   'Bridge1_R (ohms)',
+                                   'Bridge2_R (ohms)',
+                                   'Bridge3_R (ohms)')
     QuickP_Ychoice_D.grid(row=4,column=1,pady=(0,5))
     
 ####Export CSV Frame   
@@ -177,7 +188,7 @@ if __name__=='__main__':
     Custom_explain.grid(row=1,column=0)
     
     #Simple File Output button
-    Custom_B=tk.Button(CustomFrame,text='Parse Data')
+    Custom_B=tk.Button(CustomFrame,text='Parse Data',command=lambda: dp.App_DataParaser(Load_check_E.get(), Machine.get()))
     Custom_B.grid(row=2,column=0,pady=(JobFrame_Ysize,5),padx=70)
     
 

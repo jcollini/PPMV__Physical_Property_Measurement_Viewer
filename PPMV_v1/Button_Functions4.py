@@ -25,6 +25,26 @@ def Button_LoadData(MasterTK,Load_EntryTK):
     Load_EntryTK.delete(0,tk.END)
     Load_EntryTK.insert(0,MasterTK.filename)
     
+def Button_LoadData__2(MasterTK,Load_EntryTK,MachineTK,DataCL):
+    #button to grab datafile location
+    #
+    #--MasterTK is Tk window locaion of buttton
+    #--Load_EntryTK is Tk variable for load path
+    #--DataCL is the PPMSData object you will load data into
+    #
+    #Start at desktop
+    file_location='::{B4BFCC3A-DB2C-424C-B029-7FE99A87C641}'
+    MasterTK.filename=filedialog.askopenfilename(initialdir=file_location,title='Select a file',filetypes=(('PPMS files','*.dat'),('all files','*.*')))
+    
+    #update the entry with the new file. Clear it first
+    Load_EntryTK.delete(0,tk.END)
+    Load_EntryTK.insert(0,MasterTK.filename)
+    
+    #load data into data object
+    DataCL.load_data(MasterTK.filename,MachineTK.get())
+    
+
+    
     
     
 def Button_QuickPlot(Load_EntryTK,MachineTK,XchoiceTK,YchoiceTK):
@@ -94,7 +114,7 @@ def Button_ExportCW_CSVs(MasterTK,Load_EntryTK,MachineTK,XchoiceTK,YchoiceTK,CW_
         #warn user that CW toggle is off
         tk.messagebox.showwarning('Warning','Please turn on the cooling/warming toggle\nto use this feature')
 
-def Button_UpdatePlot(MasterTK,canvas_PLT,Plot_PLT,Load_EntryTK,MachineTK,XchoiceTK,YchoiceTK,CW_Toggle,empty=False):
+def Button_UpdatePlotCW(MasterTK,canvas_PLT,Plot_PLT,Load_EntryTK,MachineTK,XchoiceTK,YchoiceTK,CW_Toggle,empty=False):
     #Updates figures for CW plots (potentially more?)
     #
     #New Variable types:
@@ -103,7 +123,7 @@ def Button_UpdatePlot(MasterTK,canvas_PLT,Plot_PLT,Load_EntryTK,MachineTK,Xchoic
     
     #clear given plot
     Plot_PLT.clear()
-    print(CW_Toggle.get())
+    
         
     #Load data
     data=ppmv.Read_PPMS_File(Load_EntryTK.get(),MachineTK.get())
@@ -163,5 +183,7 @@ def Empty_Plot(MasterTK):
     canvas=FigureCanvasTkAgg(fig,master=MasterTK)
     canvas.draw()
     
+    toolbarFrame = tk.Frame(MasterTK)
     
-    return canvas,fig,ax
+    
+    return canvas,fig,ax,toolbarFrame

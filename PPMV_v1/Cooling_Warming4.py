@@ -27,10 +27,6 @@ def App_CoolingWarming(DataLoc,MachineType):
     #rootCW.grab_set() #places this window as a priority for events
     #rootCW.focus_displayof()
   
-    
-    Machine=tk.StringVar()
-    Machine.set(MachineType)
-
 
     
 ####Header widget
@@ -67,12 +63,11 @@ def App_CoolingWarming(DataLoc,MachineType):
     
 ####Plotting
     #create plot and put on screen. Have it empty to start
-    canvas,fig,CWPlot=bt.Empty_Plot(rootCW)
+    canvas,fig,CWPlot,toolbarFrame=bt.Empty_Plot(rootCW)
     #set plot to screen
     canvas.get_tk_widget().grid(row=2,column=1,columnspan=2)
     
-    #set toolbar and post to window
-    toolbarFrame = tk.Frame(rootCW)
+    
     toolbarFrame.grid(row=3,column=1,columnspan=2)
     toolbar = NavigationToolbar2Tk(canvas, toolbarFrame)
     
@@ -147,7 +142,7 @@ def App_CoolingWarming(DataLoc,MachineType):
     
 ####Update Buttons
     #make update button for plot below settings settings
-    Update_Bset=tk.Button(SetFrame,text='Update Plot',command=lambda:bt.Button_UpdatePlot(rootCW, 
+    Update_Bset=tk.Button(SetFrame,text='Update Plot',command=lambda:bt.Button_UpdatePlotCW(rootCW, 
                                                                                           canvas,
                                                                                           CWPlot,
                                                                                           Load_check_E, 
@@ -158,7 +153,7 @@ def App_CoolingWarming(DataLoc,MachineType):
     Update_Bset.grid(row=5,column=0) 
     
     #make update button for plot
-    Update_B=tk.Button(rootCW,text='Update Plot',command=lambda:bt.Button_UpdatePlot(rootCW, 
+    Update_B=tk.Button(rootCW,text='Update Plot',command=lambda:bt.Button_UpdatePlotCW(rootCW, 
                                                                                      canvas,
                                                                                      CWPlot, 
                                                                                      Load_check_E, 

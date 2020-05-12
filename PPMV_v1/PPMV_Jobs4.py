@@ -84,16 +84,41 @@ def Split_Sets_Index_Reversed(x_data,SplitVal,Reversal):
             if difference>SplitVal:
                 CutIndex=i
                 break
-        else:
+        elif Reversal == 'up to down':
             if difference<SplitVal:
                 CutIndex=i
                 break
             
     return CutIndex
 
+def Split_Sets_Index_Dynamic(x_data,SplitVal,ShiftType):
+    #finds the index where a data parameter changes from static to dynamic or vice versa
+    xsize=len(x_data)
+    for i in range(xsize):
+        #determine where data changed, depending on ShiftType
+        difference=x_data.iloc[i+1]-x_data.iloc[i]
+        
+        if ShiftType=='Static to Dynamic':
+            if difference > SplitVal:
+                CutIndex=i
+                break
+        elif ShiftType=='Dynamic to Static':
+            if difference < SplitVal:
+                CutIndex=i
+                break
+    
+    return CutIndex
+
 def DetermineDirection(x_data):
     #determins first direction of a given data that has reversals
-    x_dir=x_data.iloc[0]-x_data.iloc[25]
+    #use average difference of first few points
+    x_dir_lst=[]
+    for i in range(5):
+        x_dir_lst.append(x_data.iloc[0]-x_data.iloc[i+1])
+    
+    x_dir=np.mean(x_dir_lst)
+    print('Data average difference is '+str(x_dir))    
+    #now determine direction the begining of the data is moving in    
     if x_dir>0:
         direction='down to up'
     elif x_dir<0:
@@ -101,6 +126,27 @@ def DetermineDirection(x_data):
     else:
         print('Error: data is not changing direction')
     return direction
+
+def DetermineDynamic(x_data):
+    #determines dynamic of given data set using the average of the first few points difference
+   x_dir_lst=[]
+   for i in range(5):
+       x_dir_lst.append(x_data.iloc[0]-x_data.iloc[i+1])
+    
+   x_dir=np.mean(x_dir_lst)
+   print('Data average difference is '+str(x_dir))
+   
+   Threshold=0.002
+   
+   if np.abs(x_dir)<Threshold:
+       dynamic='Static to Dynamic'
+   
+   elif np.abs(x_dir)>Threshold:
+       dynamic='Dynamic to Static'
+
+   return dynamic    
+    
+
 
 ################################################################################
 #############################Pre-Select Jobs####################################
