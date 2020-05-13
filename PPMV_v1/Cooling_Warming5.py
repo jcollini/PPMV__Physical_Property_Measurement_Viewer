@@ -1,19 +1,30 @@
-##Cooling and Warming Application for PPMV
+"""
+Imports needed for all applications
+"""
+
 import tkinter as tk
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
 
-import PPMV_Jobs4 as ppmv
-import Button_Functions4 as bt
-
+from matplotlib.figure import Figure
 from matplotlib.backends.backend_tkagg import (
     FigureCanvasTkAgg, NavigationToolbar2Tk)
-# Implement the default Matplotlib key bindings.
 from matplotlib.backend_bases import key_press_handler
+from tkinter import filedialog
+from scipy.optimize import curve_fit
+from random import randint
 
 
+import Button_Functions5 as bt
+import PPMV_Jobs5 as ppmv
+import PPMV_Classes5 as cl
+
+import Cooling_Warming5 as cw
+import Data_Paraser5 as dp
 
 
-
-def App_CoolingWarming(DataLoc,MachineType):
+def App_CoolingWarming(dataloc,machinetype):
     #general settings
     ExportPadding=50 #seperation of export buttons
     ExportBoarderX=20 #boarder space around export buttons
@@ -34,31 +45,17 @@ def App_CoolingWarming(DataLoc,MachineType):
     Header_L.grid(row=0,column=0,pady=(0,10))
     
 ####Load Frame
-    LoadFrame=tk.LabelFrame(rootCW,text='Check/Change Loaded Data')
-    LoadFrame.grid(row=1,column=0,padx=10,pady=ExFrameY,sticky=tk.W)
-    #LoadFrame.grid_configure(ipadx=300)
+    #create loadframe and everything inside it
+    LoadBox=cl.WidgetsPPMS()
+    LoadBox.Create_LoadFrame(rootCW, 
+                             dataloc, 
+                             machinetype)
     
-    #show load buttons and import load from the previous window
-    #load data widgets
-    Load_B=tk.Button(LoadFrame,text="Load data",command=lambda: bt.Button_LoadData(rootCW, Load_check_E))
-    Load_B.grid(row=0,column=0)
-    
-    Load_check_L=tk.Label(LoadFrame,text='File:')
-    Load_check_L.grid(row=0,column=1,padx=(20,0))
-    
-    #Already loaded entry from launcher. Simply place on screen. Load info from launcher
-    Load_check_E=tk.Entry(LoadFrame)
-    Load_check_E.insert(0,DataLoc)
-    Load_check_E.grid(row=0,column=2)
-    
-    Machine=tk.StringVar()
-    Machine.set(MachineType)
-    
-    Load_machine_L=tk.Label(LoadFrame,text='PPMS and Puck Used:')
-    Load_machine_L.grid(row=0,column=3,padx=(20,0))
-    
-    Load_machine_D=tk.OptionMenu(LoadFrame, Machine, '9T-ACT','9T-R','14T-ACT','14T-R','Dynacool')
-    Load_machine_D.grid(row=0,column=4)
+    LoadBox.Load_B.configure(command=lambda: bt.Button_LoadData(rootCW, 
+                                                                LoadBox.DataLoc, 
+                                                                LoadBox.DataDisplay, 
+                                                                LoadBox.Machine, 
+                                                                Data))
     
     
 ####Plotting
@@ -165,7 +162,7 @@ def App_CoolingWarming(DataLoc,MachineType):
 
     
     
-    
+    Data=cl.DataPPMS(LoadBox.DataLoc,LoadBox.Machine)
     
     
     

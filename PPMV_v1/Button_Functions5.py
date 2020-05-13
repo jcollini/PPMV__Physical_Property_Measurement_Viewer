@@ -1,31 +1,63 @@
-import tkinter as tk
-import pandas as pd
+"""
+Imports needed for all applications
+"""
 
-import PPMV_Jobs4 as ppmv
+import tkinter as tk
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
 
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_tkagg import (
     FigureCanvasTkAgg, NavigationToolbar2Tk)
-# Implement the default Matplotlib key bindings.
 from matplotlib.backend_bases import key_press_handler
 from tkinter import filedialog
-#Modual for button functions in PPMV
+from scipy.optimize import curve_fit
+from random import randint
 
-def Button_LoadData(MasterTK,Load_EntryTK):
-    #button to grab datafile location
-    #
-    #--MasterTK is Tk window locaion of buttton
-    #--Load_EntryTK is Tk variable for load path
-    #
-    #Start at desktop
-    file_location='::{B4BFCC3A-DB2C-424C-B029-7FE99A87C641}'
-    MasterTK.filename=filedialog.askopenfilename(initialdir=file_location,title='Select a file',filetypes=(('PPMS files','*.dat'),('all files','*.*')))
+
+import Button_Functions5 as bt
+import PPMV_Jobs5 as ppmv
+import PPMV_Classes5 as cl
+
+import Cooling_Warming5 as cw
+import Data_Paraser5 as dp
+"""
+Variable Input Names
+<object> variables:
+--DataCL: DataPPMS object that holds data atributes from experiment
+--MasterTK: window or frame needed for the action
+--DataLocTK: string object for the filepath
+--DataDisplayTK: string object for shorten filepath for display only
+--MachineTK: string object for the machinetype used to collect the data
+--XchoiceTK: string object for selected the x axis of from DataCL
+--YchoiceTK: "" for y axis
+--FigPLT: MatPlotLib figure object
+--PlotPLT: MatPlotLib axes object, joined to FigPLT
+--CanvasPLT: MatPlotLib Canvas object housing PlotPLT and FigPLT
+"""
+
+
+
+
+"""
+####Button Functions####
+
+Functions for activating buttons
+Generally Button Functions, 
+-- should be taking in only objects
+-- grabbing and changing data and atributes of objects
+-- not returning any values  
+
+Input variables denote which type of object they are by the ending capital letters
+--TK is tkinter object
+--CL is DataPPMS object
+--PLT is Matplotlib object
+"""
+
+
     
-    #update the entry with the new file. Clear it first
-    Load_EntryTK.delete(0,tk.END)
-    Load_EntryTK.insert(0,MasterTK.filename)
-    
-def Button_LoadData__2(MasterTK,Load_EntryTK,MachineTK,DataCL):
+def Button_LoadData(MasterTK,DataLocTK,DataDisplayTK,MachineTK,DataCL):
     #button to grab datafile location
     #
     #--MasterTK is Tk window locaion of buttton
@@ -35,41 +67,40 @@ def Button_LoadData__2(MasterTK,Load_EntryTK,MachineTK,DataCL):
     #Start at desktop
     file_location='::{B4BFCC3A-DB2C-424C-B029-7FE99A87C641}'
     MasterTK.filename=filedialog.askopenfilename(initialdir=file_location,title='Select a file',filetypes=(('PPMS files','*.dat'),('all files','*.*')))
+    fn=MasterTK.filename
     
     #update the entry with the new file. Clear it first
-    Load_EntryTK.delete(0,tk.END)
-    Load_EntryTK.insert(0,MasterTK.filename)
-    
-    #load data into data object
-    DataCL.load_data(MasterTK.filename,MachineTK.get())
-    
-
+    DataLocTK.set(fn)
+    DataDisplayTK.set(fn[0:10]+'......'+fn[-10:])
     
     
     
-def Button_QuickPlot(Load_EntryTK,MachineTK,XchoiceTK,YchoiceTK):
+def Button_QuickPlot(DataCL,XchoiceTK,YchoiceTK):
     #button for quick plot
     #
     #--Load_EntryTK is Tk variable for load path
     #--MachineTK is Tk variable for machine type
     #--XchoiceTK and YchoiceTK are Tk variables for names of x and y axis of a dataset
-    ppmv.Job_QuickPlot(Load_EntryTK.get(),MachineTK.get(),XchoiceTK.get(),YchoiceTK.get())
     
-def Button_QuickSave_CSV(Load_EntryTK,MachineTK):
+    #get Xdata and Ydata
+    Xdata,Ydata=DataCL.get_axes(XchoiceTK,YchoiceTK)
+    
+    #quickplot data
+    ppmv.Job_QuickPlot(Xdata,Ydata)
+    
+def Button_QuickSave_CSV(DataCL):
     #Button to quickly save loaded file
     #
     #--Load_EntryTK is Tk variable for load path
     #--MachineTK is Tk variable for machine type
     #
-    #grab loaded PPMS file dataframe
-    PPMS_File=Load_EntryTK.get()
-    MachineType=MachineTK.get()
-    data=ppmv.Read_PPMS_File(PPMS_File,MachineType)
+    #Load the current data
+    DataCL.load_data()
     
     #Grab the file location and name from the user
     export_file_path = filedialog.asksaveasfilename(defaultextension='.csv',filetypes=(('csv','*.csv'),('all files','*.*')))
                                     
-    data.to_csv (export_file_path, index = False, header=True)
+    DataCL.data.to_csv (export_file_path, index = False, header=True)
     
 def Button_ExportCW_CSVs(MasterTK,Load_EntryTK,MachineTK,XchoiceTK,YchoiceTK,CW_Toggle,):
     #Load data
@@ -173,6 +204,18 @@ def Button_SaveFig(Fig_PLT):
     Fig_PLT.savefig(export_file_path)
     
 
+
+"""
+#### Object Creation Functions ####
+
+These create several sets of objects that get commonly placed and tied together for
+various PPMV applications. These can generate matplotlib objects, tkinter objects, and more.
+
+functions return the needed widgets and objects associated with them
+"""
+
+
+
     
 def Empty_Plot(MasterTK):
     #creates a blank plot for use on a screen for a given Master
@@ -187,3 +230,5 @@ def Empty_Plot(MasterTK):
     
     
     return canvas,fig,ax,toolbarFrame
+
+

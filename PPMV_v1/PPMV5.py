@@ -1,12 +1,35 @@
+"""
+Imports needed for all applications
+"""
+
 import tkinter as tk
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
 
-import Button_Functions4 as bt
-import Cooling_Warming4 as cw
-import Data_Paraser4 as dp
-#Designer and Programer: John Collini
-#Front end design for PPMV (Physical Property Measurement Viewer)
-#Style is a LAUNCHER
+from matplotlib.figure import Figure
+from matplotlib.backends.backend_tkagg import (
+    FigureCanvasTkAgg, NavigationToolbar2Tk)
+from matplotlib.backend_bases import key_press_handler
+from tkinter import filedialog
+from scipy.optimize import curve_fit
+from random import randint
 
+
+import Button_Functions5 as bt
+import PPMV_Jobs5 as ppmv
+import PPMV_Classes5 as cl
+
+import Cooling_Warming5 as cw
+import Data_Paraser5 as dp
+"""
+Designer and Programer: John Collini
+Front end design for PPMV (Physical Property Measurement Viewer)
+Style is a LAUNCHER
+
+Main controls the tkinter widgets and places them onto the screen
+
+"""
     
 
 
@@ -32,34 +55,45 @@ if __name__=='__main__':
     #General padding to have frames match
     JobFrame_Ysize=56
     #Padding if there is missing lines for the explaination text
-    LinePadding=12    
+    LinePadding=12
+        
 
 ####Load Frame
     LoadFrame=tk.LabelFrame(root,text='Load PPMS Data',padx=205)
     LoadFrame.grid(row=1,column=0,padx=10,sticky=tk.W)
-    #LoadFrame.grid_configure(ipadx=300)
     
     #Widgets and placement
-    #load data widgets
-    Load_B=tk.Button(LoadFrame,text="Load data",command=lambda: bt.Button_LoadData(root,Load_check_E))
-    Load_B.grid(row=0,column=0)
-    
-    Load_check_L=tk.Label(LoadFrame,text='File:')
-    Load_check_L.grid(row=0,column=1,padx=(20,0))
-    
-    Load_check_E=tk.Entry(LoadFrame)
-    Load_check_E.insert(0, '') #empty string to initialize it
-    Load_check_E.grid(row=0,column=2)
-    
-    #machine selection for data
+    #file and machine selection for data
     Machine=tk.StringVar()
     Machine.set('9T-R')
+
+    DataLoc=tk.StringVar()
+    DataLoc.set('')
     
-    Load_machine_L=tk.Label(LoadFrame,text='PPMS and Puck Used:')
-    Load_machine_L.grid(row=0,column=3,padx=(20,0))
+    DataDisplay=tk.StringVar()
+    DataDisplay.set('      No Data Loaded      ')
     
-    Load_machine_D=tk.OptionMenu(LoadFrame, Machine, '9T-ACT','9T-R','14T-ACT','14T-R','Dynacool')
-    Load_machine_D.grid(row=0,column=4)
+    #load data widgets
+    Load_B=tk.Button(LoadFrame,text="Load data",command=lambda: bt.Button_LoadData(root,
+                                                                                   DataLoc,
+                                                                                   DataDisplay,
+                                                                                   Machine,
+                                                                                   Data))
+    Load_B.grid(row=0,column=0)
+    
+    Loadcheck_L=tk.Label(LoadFrame,text='File:')
+    Loadcheck_L.grid(row=0,column=1,padx=(20,0))
+    
+    Loadcheck_E=tk.Label(LoadFrame,textvariable=DataDisplay,bg='white')
+    Loadcheck_E.grid(row=0,column=2)
+    
+    
+    Loadmachine_L=tk.Label(LoadFrame,text='PPMS and Puck Used:')
+    Loadmachine_L.grid(row=0,column=3,padx=(20,0))
+    
+    optionsMachine=['9T-ACT','9T-R','14T-ACT','14T-R','Dynacool']
+    Loadmachine_D=tk.OptionMenu(LoadFrame, Machine, *optionsMachine)
+    Loadmachine_D.grid(row=0,column=4)
 
 ####Jobs Frame 
     JobsFrame=tk.LabelFrame(root,text='Jobs Frame')
@@ -79,8 +113,7 @@ if __name__=='__main__':
     QuickP_explain.grid(row=1,column=0,columnspan=2)
     
     #plot button
-    QuickP_B=tk.Button(PlotFrame,text='Quick Plot',command=lambda: bt.Button_QuickPlot(Load_check_E, 
-                                                                               Machine, 
+    QuickP_B=tk.Button(PlotFrame,text='Quick Plot',command=lambda: bt.Button_QuickPlot(Data, 
                                                                                Xchoice, 
                                                                                Ychoice))
     QuickP_B.grid(row=2,column=0,columnspan=2)
@@ -125,7 +158,7 @@ if __name__=='__main__':
     Export_explain.grid(row=1,column=0)
     
     #Simple File Output button
-    Export_file_B=tk.Button(ExportFrame,text='Export (.dat) data \n to (.csv)',command=lambda: bt.Button_QuickSave_CSV(Load_check_E, Machine))
+    Export_file_B=tk.Button(ExportFrame,text='Export (.dat) data \n to (.csv)',command=lambda: bt.Button_QuickSave_CSV(Data))
     Export_file_B.grid(row=2,column=0,pady=(JobFrame_Ysize,5),padx=45)
     
     
@@ -141,7 +174,7 @@ if __name__=='__main__':
     CW_explain.grid(row=1,column=0)
     
     #Simple File Output button
-    CW_B=tk.Button(CWFrame,text='Cooling and Warming',command=lambda: cw.App_CoolingWarming(Load_check_E.get(), Machine.get()))
+    CW_B=tk.Button(CWFrame,text='Cooling and Warming',command=lambda: cw.App_CoolingWarming(DataLoc.get(), Machine.get()))
     CW_B.grid(row=2,column=0,pady=(JobFrame_Ysize,5),padx=32)
     
 ####Magnetoresistance Frame
@@ -188,8 +221,12 @@ if __name__=='__main__':
     Custom_explain.grid(row=1,column=0)
     
     #Simple File Output button
-    Custom_B=tk.Button(CustomFrame,text='Parse Data',command=lambda: dp.App_DataParaser(Load_check_E.get(), Machine.get()))
+    Custom_B=tk.Button(CustomFrame,text='Parse Data',command=lambda: dp.App_DataParaser(Loadcheck_E.get(), Machine.get()))
     Custom_B.grid(row=2,column=0,pady=(JobFrame_Ysize,5),padx=70)
+    
+
+####Loaded Data
+    Data=cl.DataPPMS(DataLoc, Machine)
     
 
     

@@ -1,11 +1,27 @@
-##PPMV Jobs now with Pandas to make it easier
+"""
+Imports needed for all applications
+"""
+
+import tkinter as tk
+import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-import numpy as np
 
+from matplotlib.figure import Figure
+from matplotlib.backends.backend_tkagg import (
+    FigureCanvasTkAgg, NavigationToolbar2Tk)
+from matplotlib.backend_bases import key_press_handler
+from tkinter import filedialog
 from scipy.optimize import curve_fit
 from random import randint
-from matplotlib.figure import Figure
+
+
+import Button_Functions5 as bt
+import PPMV_Jobs5 as ppmv
+import PPMV_Classes5 as cl
+
+import Cooling_Warming5 as cw
+import Data_Paraser5 as dp
 
 
 
@@ -154,26 +170,11 @@ def DetermineDynamic(x_data):
 
 
 
-def Job_QuickPlot(DAT_name,MachineType,Xaxis,Yaxis):
+def Job_QuickPlot(Xdata,Ydata,Xname='',Yname=''):
     #Quick Plot function for Quick Plot button
     #First, load data
     #We need which bridge to grab for bridge numbers, if selected
  
-  
-    
-    #read in data as a pandas dataframe    
-    data=Read_PPMS_File(DAT_name,MachineType)
-   
-    
-    #grab needed data for x and y axis using Xaxis name to get the column and name the axis
-    
-    Xdata=data[Xaxis]
-    Xname=Xaxis
-        
-    Ydata=data[Yaxis]
-    Yname=Yaxis
-    
-   
     plt.figure()
     plt.plot(Xdata,Ydata,'-')
     plt.xlabel(Xname,fontsize=12)

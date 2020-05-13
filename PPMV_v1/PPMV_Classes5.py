@@ -1,20 +1,37 @@
-#Needed Classes for PPMV
-import pandas as pd
+"""
+Imports needed for all applications
+"""
 
+import tkinter as tk
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+
+from matplotlib.figure import Figure
 from matplotlib.backends.backend_tkagg import (
     FigureCanvasTkAgg, NavigationToolbar2Tk)
-# Implement the default Matplotlib key bindings.
 from matplotlib.backend_bases import key_press_handler
 from tkinter import filedialog
+from scipy.optimize import curve_fit
+from random import randint
 
-import PPMV_Jobs4 as ppmv
 
+import Button_Functions5 as bt
+import PPMV_Jobs5 as ppmv
+import PPMV_Classes5 as cl
 
-class PPMSData():
+import Cooling_Warming5 as cw
+import Data_Paraser5 as dp
+
+class DataPPMS():
     #class loads and allows for editable PPMS data
-    def __init__(self):
+    def __init__(self,DataLocTK,MachineTK):
         #empty dataset
         self.data=pd.DataFrame()
+        
+        #strings needed to load data
+        self.filenameTK=DataLocTK
+        self.machineTK=MachineTK
         
         #Parsing Directions
         #list containing parased labels
@@ -36,9 +53,22 @@ class PPMSData():
         self.data_indexcuts=[]
         self.data_sections=[]
     
-    def load_data(self,DataLoc,MachineType):
+    def load_data(self):
         #Load only needed data. This overwrites current data
-        self.data=ppmv.Read_PPMS_File(DataLoc, MachineType)
+        self.data=ppmv.Read_PPMS_File(self.filenameTK.get(), self.machineTK.get())
+        
+    def get_axes(self,Xchoice,Ychoice):
+        #returns a selected x and y choice
+        
+        #load current data
+        self.load_data()
+        data=self.data
+        
+        #grab just x and y axes
+        Xdata=data[Xchoice.get()]
+        Ydata=data[Ychoice.get()]
+        
+        return Xdata,Ydata
         
     
     #definition for adding cuts
@@ -57,6 +87,7 @@ class PPMSData():
         
     def method_Shift_Direction(self,data,label):
         splitvalue=0.1
+        
         
         #using the label, grab the column of data used to split
         Xdata=data[label]
@@ -87,6 +118,9 @@ class PPMSData():
     def parseData(self):
         #for each added parse instruction, parse the data. 
         ParseLength=len(self.parse_labels)
+        
+        #load current selected data and save a copy to work with
+        self.load_data()
         data=self.data #grab a copy of the original data to manipulate
         
         for i in range(ParseLength):
@@ -114,5 +148,46 @@ class PPMSData():
             print(direction)
             self.parse_results.append(direction)
                 
-                
-                
+
+
+class WidgetsPPMS():
+    #class generates groups of commonly used widgets
+    def __init__(self):
+        self.ExFrameY=5 #boarder space around export frame
+    
+    def Create_LoadFrame(self,MasterTK,dataloc_i,machinetype_i):
+        #creates standard loadframe use for applications
+        self.LoadFrame=tk.LabelFrame(MasterTK,text='Check/Change Loaded Data')
+        self.LoadFrame.grid(row=1,column=0,padx=10,pady=self.ExFrameY,sticky=tk.W)
+        #LoadFrame.grid_configure(ipadx=300)
+        
+        #Widgets and placement
+        #file and machine selection for data
+        self.Machine=tk.StringVar()
+        self.Machine.set(machinetype_i)
+    
+        self.DataLoc=tk.StringVar()
+        self.DataLoc.set(machinetype_i)
+        
+        self.DataDisplay=tk.StringVar()
+        self.DataDisplay.set('      No Data Loaded      ')
+        
+        #load data widgets
+        self.Load_B=tk.Button(self.LoadFrame,text="Load data")
+        
+        self.Load_B.grid(row=0,column=0)
+        
+        self.Loadcheck_L=tk.Label(self.LoadFrame,text='File:')
+        self.Loadcheck_L.grid(row=0,column=1)
+        
+        self.Loadcheck_E=tk.Label(self.LoadFrame,textvariable=self.DataDisplay,bg='white')
+        self.Loadcheck_E.grid(row=0,column=2)
+        
+        
+        self.Loadmachine_L=tk.Label(self.LoadFrame,text='PPMS and Puck Used:')
+        self.Loadmachine_L.grid(row=0,column=3)
+        
+        optionsMachine=['9T-ACT','9T-R','14T-ACT','14T-R','Dynacool']
+        self.Loadmachine_D=tk.OptionMenu(self.LoadFrame, self.Machine, *optionsMachine)
+        self.Loadmachine_D.grid(row=0,column=4)
+                    
