@@ -25,64 +25,46 @@ import Data_Paraser5 as dp
 
 
 def App_CoolingWarming(dataloc,machinetype):
-    #general settings
-    ExportPadding=50 #seperation of export buttons
-    ExportBoarderX=20 #boarder space around export buttons
-    ExportBoarderY=5 #boarder space around export buttons
-    ExFrameY=5 #boarder space around export frame
-   
-    #controls the window for cooling and warming
-    rootCW=tk.Toplevel()
-    rootCW.title('PPMV Cooling and Warming')
-    rootCW.iconbitmap('QMC_Temp.ico')
-    #rootCW.grab_set() #places this window as a priority for events
-    #rootCW.focus_displayof()
+
+    
+    #create CW object and window
+    CW=cl.WidgetsPPMV()
+    CW.Create_Toplevel('PPMV Cooling and Warming', 'QMC_Temp.ico')
   
 
     
 ####Header widget
-    Header_L=tk.Label(rootCW,text='PPMV Cooling and Warming')
-    Header_L.grid(row=0,column=0,pady=(0,10))
+    CW.Create_Header(CW.rootApp,'PPMV Cooling and Warming')
     
 ####Load Frame
     #create loadframe and everything inside it
-    LoadBox=cl.WidgetsPPMS()
-    LoadBox.Create_LoadFrame(rootCW, 
-                             dataloc, 
-                             machinetype)
+    CW.Create_LoadFrame(CW.rootApp, 
+                        dataloc, 
+                        machinetype)
     
-    LoadBox.Load_B.configure(command=lambda: bt.Button_LoadData(rootCW, 
-                                                                LoadBox.DataLoc, 
-                                                                LoadBox.DataDisplay, 
-                                                                LoadBox.Machine, 
-                                                                Data))
+    CW.Load_B.configure(command=lambda: bt.Button_LoadData(CW.rootApp, 
+                                                           CW.DataLoc, 
+                                                           CW.DataDisplay, 
+                                                           CW.Machine, 
+                                                           Data))
     
     
 ####Plotting
-    #create plot and put on screen. Have it empty to start
-    canvas,fig,CWPlot,toolbarFrame=bt.Empty_Plot(rootCW)
-    #set plot to screen
-    canvas.get_tk_widget().grid(row=2,column=1,columnspan=2)
+    CW.Create_EmptyPlot(CW.rootApp)
     
-    
-    toolbarFrame.grid(row=3,column=1,columnspan=2)
-    toolbar = NavigationToolbar2Tk(canvas, toolbarFrame)
     
 ####Save/Export frame
-    ExportFrame=tk.LabelFrame(rootCW,text='Save/Export')
-    ExportFrame.grid(row=1,column=1,columnspan=2,pady=ExFrameY)    
-    #create save button for plot
-    SaveFig_B=tk.Button(ExportFrame,text='Save Figure',command=lambda: bt.Button_SaveFig(fig))
-    SaveFig_B.grid(row=0,column=0,padx=(ExportBoarderX,ExportPadding),pady=ExportBoarderY)
+    CW.Create_ExportFrame(CW.rootApp)
+    CW.SaveFig_B.configure(command=lambda: bt.Button_SaveFig(CW.Fig))
+    
     
     #create export CVS button
-    Export_B=tk.Button(ExportFrame,text='Save Seperate CSVs',command=lambda: bt.Button_ExportCW_CSVs(rootCW, 
-                                                                                                     Load_check_E, 
-                                                                                                     Machine, 
-                                                                                                     Xchoice, 
-                                                                                                     Ychoice, 
-                                                                                                     CW_Toggle))
-    Export_B.grid(row=0,column=1,padx=(ExportPadding,ExportBoarderX),pady=ExportBoarderY)
+    CW.Export_B.configure(command=lambda: bt.Button_ExportCW_CSVs(CW.rootApp, 
+                                                                  Data, 
+                                                                  CW.Xchoice, 
+                                                                  CW.Ychoice, 
+                                                                  CW.CW_Toggle))
+    
     
     
    
@@ -90,79 +72,30 @@ def App_CoolingWarming(dataloc,machinetype):
     
     
 ####Cooling and Warming Settings Frame
-    SetFrame=tk.LabelFrame(rootCW,text='Settings')
-    SetFrame.grid(row=2,column=0)
+    CW.Create_CWSettings(CW.rootApp)
+    CW.Update_Bset.configure(command=lambda:bt.Button_UpdatePlotCW(CW.rootApp, 
+                                                                   CW.canvas,
+                                                                   CW.Plot,
+                                                                   Data, 
+                                                                   CW.Xchoice, 
+                                                                   CW.Ychoice, 
+                                                                   CW.CW_Toggle))
     
-    #1st direction: pick axes
-    help1='Seperate your data into Cooling and Warming curves\nChoose your x and y axis to split up'
-    Direction1=tk.Label(SetFrame,text=help1)
-    Direction1.grid(row=0,column=0,columnspan=2)
-    
-    #x and y axis drop down menu selection
-    Xchoice=tk.StringVar()
-    Ychoice=tk.StringVar()
-    
-    #set each as the usualy starting ones
-    Xchoice.set('Temperature (K)')
-    Ychoice.set('Bridge1_R (ohms)')
-    
-    #make menus
-    QuickP_Xchoice_L=tk.Label(SetFrame,text='x axis')
-    QuickP_Xchoice_L.grid(row=1,column=0)
-    
-    QuickP_Ychoice_L=tk.Label(SetFrame,text='y axis')
-    QuickP_Ychoice_L.grid(row=2,column=0,pady=(0,5))
-   
-    QuickP_Xchoice_D=tk.OptionMenu(SetFrame, Xchoice, 'Temperature (K)','Field (Oe)')
-    QuickP_Xchoice_D.grid(row=1,column=1)
-    QuickP_Ychoice_D=tk.OptionMenu(SetFrame, Ychoice, 'Bridge1_R (ohms)','Bridge2_R (ohms)','Bridge3_R (ohms)')
-    QuickP_Ychoice_D.grid(row=2,column=1,pady=(0,5))
-    
-    #Cooling and Warming radio buttons toggle
-    Radio_L=tk.Label(SetFrame,text='Cooling/Warming toggle')
-    Radio_L.grid(row=3,column=0,rowspan=2)
-    
-    #test label
-    CW_Toggle=tk.BooleanVar()
-    CW_Toggle.set(False)
-    
-
-    RadioOff=tk.Radiobutton(SetFrame,text='off',variable=CW_Toggle, value=False)
-    RadioOff.grid(row=3,column=1,sticky=tk.W)
-    
-    RadioOn=tk.Radiobutton(SetFrame,text='on',variable=CW_Toggle, value=True)
-    RadioOn.grid(row=4,column=1,sticky=tk.W)
-    
-    
-    
-    
-    
-####Update Buttons
-    #make update button for plot below settings settings
-    Update_Bset=tk.Button(SetFrame,text='Update Plot',command=lambda:bt.Button_UpdatePlotCW(rootCW, 
-                                                                                          canvas,
-                                                                                          CWPlot,
-                                                                                          Load_check_E, 
-                                                                                          Machine, 
-                                                                                          Xchoice, 
-                                                                                          Ychoice, 
-                                                                                          CW_Toggle))
-    Update_Bset.grid(row=5,column=0) 
-    
-    #make update button for plot
-    Update_B=tk.Button(rootCW,text='Update Plot',command=lambda:bt.Button_UpdatePlotCW(rootCW, 
-                                                                                     canvas,
-                                                                                     CWPlot, 
-                                                                                     Load_check_E, 
-                                                                                     Machine, 
-                                                                                     Xchoice, 
-                                                                                     Ychoice, 
-                                                                                     CW_Toggle))
+    #make update button below the plot
+    Update_B=tk.Button(CW.rootApp,text='Update Plot',command=lambda:bt.Button_UpdatePlotCW(CW.rootApp, 
+                                                                                     CW.canvas,
+                                                                                     CW.Plot, 
+                                                                                     Data, 
+                                                                                     CW.Xchoice, 
+                                                                                     CW.Ychoice, 
+                                                                                     CW.CW_Toggle))
     Update_B.grid(row=3,column=2,sticky=tk.E)
 
     
     
-    Data=cl.DataPPMS(LoadBox.DataLoc,LoadBox.Machine)
+    
+####Data Object for window
+    Data=cl.DataPPMS(CW.DataLoc,CW.Machine)
     
     
     

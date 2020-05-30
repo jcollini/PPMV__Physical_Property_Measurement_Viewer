@@ -150,10 +150,25 @@ class DataPPMS():
                 
 
 
-class WidgetsPPMS():
+class WidgetsPPMV():
     #class generates groups of commonly used widgets
     def __init__(self):
         self.ExFrameY=5 #boarder space around export frame
+        self.ExportPadding=50 #seperation of export buttons
+        self.ExportBoarderX=20 #boarder space around export buttons
+        self.ExportBoarderY=5 #boarder space around export buttons
+        self.ExFrameY=5 #boarder space around export frame
+        
+    def Create_Toplevel(self,title,icon):
+        #controls the window for cooling and warming
+        self.rootApp=tk.Toplevel()
+        self.rootApp.title(title)
+        self.rootApp.iconbitmap(icon)
+        self.rootApp.grab_set() #places this window as a priority for events
+    
+    def Create_Header(self,MasterTK,title):
+        self.Header_L=tk.Label(MasterTK,text=title)
+        self.Header_L.grid(row=0,column=0,pady=(0,10))
     
     def Create_LoadFrame(self,MasterTK,dataloc_i,machinetype_i):
         #creates standard loadframe use for applications
@@ -190,4 +205,73 @@ class WidgetsPPMS():
         optionsMachine=['9T-ACT','9T-R','14T-ACT','14T-R','Dynacool']
         self.Loadmachine_D=tk.OptionMenu(self.LoadFrame, self.Machine, *optionsMachine)
         self.Loadmachine_D.grid(row=0,column=4)
+        
+    def Create_EmptyPlot(self,MasterTK):
+        #create plot and put on screen. Have it empty to start
+        self.canvas,self.Fig,self.Plot,self.toolbarFrame=bt.Empty_Plot(MasterTK)
+        #set plot to screen
+        self.canvas.get_tk_widget().grid(row=2,column=1,columnspan=2)
+    
+    
+        self.toolbarFrame.grid(row=3,column=1,columnspan=2)
+        self.toolbar = NavigationToolbar2Tk(self.canvas, self.toolbarFrame)
+    
+    def Create_ExportFrame(self,MasterTK):
+        self.ExportFrame=tk.LabelFrame(MasterTK,text='Save/Export')
+        self.ExportFrame.grid(row=1,column=1,columnspan=2,pady=self.ExFrameY)    
+        #create save button for plot
+        self.SaveFig_B=tk.Button(self.ExportFrame,text='Save Figure')
+        self.SaveFig_B.grid(row=0,column=0,padx=(self.ExportBoarderX,self.ExportPadding),pady=self.ExportBoarderY)
+        self.Export_B=tk.Button(self.ExportFrame,text='Save CSV')
+        self.Export_B.grid(row=0,column=1,padx=(self.ExportPadding,self.ExportBoarderX),pady=self.ExportBoarderY)
+        
+    def Create_CWSettings(self,MasterTK):
+        self.SetFrame=tk.LabelFrame(MasterTK,text='Settings')
+        self.SetFrame.grid(row=2,column=0)
+        
+        #1st direction: pick axes
+        help1='Seperate your data into Cooling and Warming curves\nChoose your x and y axis to split up'
+        self.Direction1=tk.Label(self.SetFrame,text=help1)
+        self.Direction1.grid(row=0,column=0,columnspan=2)
+        
+        #x and y axis drop down menu selection
+        self.Xchoice=tk.StringVar()
+        self.Ychoice=tk.StringVar()
+        
+        #set each as the usualy starting ones
+        self.Xchoice.set('Temperature (K)')
+        self.Ychoice.set('Bridge1_R (ohms)')
+        
+        #make menus
+        self.QuickP_Xchoice_L=tk.Label(self.SetFrame,text='x axis')
+        self.QuickP_Xchoice_L.grid(row=1,column=0)
+        
+        self.QuickP_Ychoice_L=tk.Label(self.SetFrame,text='y axis')
+        self.QuickP_Ychoice_L.grid(row=2,column=0,pady=(0,5))
+       
+        self.QuickP_Xchoice_D=tk.OptionMenu(self.SetFrame, self.Xchoice, 'Temperature (K)','Field (Oe)')
+        self.QuickP_Xchoice_D.grid(row=1,column=1)
+        self.QuickP_Ychoice_D=tk.OptionMenu(self.SetFrame, self.Ychoice, 'Bridge1_R (ohms)','Bridge2_R (ohms)','Bridge3_R (ohms)')
+        self.QuickP_Ychoice_D.grid(row=2,column=1,pady=(0,5))
+        
+        #Cooling and Warming radio buttons toggle
+        self.Radio_L=tk.Label(self.SetFrame,text='Cooling/Warming toggle')
+        self.Radio_L.grid(row=3,column=0,rowspan=2)
+        
+        #test label
+        self.CW_Toggle=tk.BooleanVar()
+        self.CW_Toggle.set(False)
+        
+    
+        self.RadioOff=tk.Radiobutton(self.SetFrame,text='off',variable=self.CW_Toggle, value=False)
+        self.RadioOff.grid(row=3,column=1,sticky=tk.W)
+        
+        self.RadioOn=tk.Radiobutton(self.SetFrame,text='on',variable=self.CW_Toggle, value=True)
+        self.RadioOn.grid(row=4,column=1,sticky=tk.W)
+    
+        #make update button for plot below settings settings
+        self.Update_Bset=tk.Button(self.SetFrame,text='Update Plot')
+        self.Update_Bset.grid(row=5,column=0) 
+        
+
                     

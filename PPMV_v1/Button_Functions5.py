@@ -102,16 +102,11 @@ def Button_QuickSave_CSV(DataCL):
                                     
     DataCL.data.to_csv (export_file_path, index = False, header=True)
     
-def Button_ExportCW_CSVs(MasterTK,Load_EntryTK,MachineTK,XchoiceTK,YchoiceTK,CW_Toggle,):
-    #Load data
-    data=ppmv.Read_PPMS_File(Load_EntryTK.get(),MachineTK.get())
+def Button_ExportCW_CSVs(MasterTK,DataCL,XchoiceTK,YchoiceTK,CW_Toggle):
+    
     
     #Grab wanted axis anmes and data, convert to numpy
-    Xdata=data[XchoiceTK.get()]
-    Xname=XchoiceTK.get()
-        
-    Ydata=data[YchoiceTK.get()]
-    Yname=YchoiceTK.get()
+    Xdata,Ydata=DataCL.get_axes(XchoiceTK,YchoiceTK)
     
     #Plot data depending on toggle
     if CW_Toggle.get():
@@ -145,7 +140,7 @@ def Button_ExportCW_CSVs(MasterTK,Load_EntryTK,MachineTK,XchoiceTK,YchoiceTK,CW_
         #warn user that CW toggle is off
         tk.messagebox.showwarning('Warning','Please turn on the cooling/warming toggle\nto use this feature')
 
-def Button_UpdatePlotCW(MasterTK,canvas_PLT,Plot_PLT,Load_EntryTK,MachineTK,XchoiceTK,YchoiceTK,CW_Toggle,empty=False):
+def Button_UpdatePlotCW(MasterTK,canvas_PLT,Plot_PLT,DataCL,XchoiceTK,YchoiceTK,CW_Toggle,empty=False):
     #Updates figures for CW plots (potentially more?)
     #
     #New Variable types:
@@ -156,15 +151,7 @@ def Button_UpdatePlotCW(MasterTK,canvas_PLT,Plot_PLT,Load_EntryTK,MachineTK,Xcho
     Plot_PLT.clear()
     
         
-    #Load data
-    data=ppmv.Read_PPMS_File(Load_EntryTK.get(),MachineTK.get())
-    
-    #Grab wanted axis anmes and data, convert to numpy
-    Xdata=data[XchoiceTK.get()]
-    Xname=XchoiceTK.get()
-        
-    Ydata=data[YchoiceTK.get()]
-    Yname=YchoiceTK.get()
+    Xdata,Ydata=DataCL.get_axes(XchoiceTK,YchoiceTK)
     
     #Plot data depending on toggle
     if CW_Toggle.get():
@@ -174,13 +161,13 @@ def Button_UpdatePlotCW(MasterTK,canvas_PLT,Plot_PLT,Load_EntryTK,MachineTK,Xcho
         Plot_PLT.plot(X1,Y1,'b',label='cool down')
         Plot_PLT.plot(X2,Y2,'r',label='warm up')
         Plot_PLT.legend(loc='best')
-        Plot_PLT.set_xlabel(Xname)
-        Plot_PLT.set_ylabel(Yname)
+        Plot_PLT.set_xlabel(XchoiceTK.get())
+        Plot_PLT.set_ylabel(YchoiceTK.get())
     else:
         #overwrite original fig and plot with unsplit data
         Plot_PLT.plot(Xdata,Ydata)
-        Plot_PLT.set_xlabel(Xname)
-        Plot_PLT.set_ylabel(Yname)
+        Plot_PLT.set_xlabel(XchoiceTK.get())
+        Plot_PLT.set_ylabel(YchoiceTK.get())
         
     
     #redraw canvas with ticks inside
