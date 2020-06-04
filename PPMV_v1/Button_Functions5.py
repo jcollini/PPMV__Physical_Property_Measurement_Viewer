@@ -66,12 +66,12 @@ def Button_LoadData(MasterTK,DataLocTK,DataDisplayTK,MachineTK,DataCL):
     #
     #Start at desktop
     file_location='::{B4BFCC3A-DB2C-424C-B029-7FE99A87C641}'
-    MasterTK.filename=filedialog.askopenfilename(initialdir=file_location,title='Select a file',filetypes=(('PPMS files','*.dat'),('all files','*.*')))
+    MasterTK.filename=filedialog.askopenfilename(initialdir=file_location,title='Select a file',filetypes=(('PPMS and MPMS files','*.dat'),('all files','*.*')))
     fn=MasterTK.filename
     
     #update the entry with the new file. Clear it first
     DataLocTK.set(fn)
-    DataDisplayTK.set(fn[0:10]+'......'+fn[-10:])
+    DataDisplayTK.set(fn[0:10]+'.......'+fn[-10:])
     
     
     
@@ -81,6 +81,9 @@ def Button_QuickPlot(DataCL,XchoiceTK,YchoiceTK):
     #--Load_EntryTK is Tk variable for load path
     #--MachineTK is Tk variable for machine type
     #--XchoiceTK and YchoiceTK are Tk variables for names of x and y axis of a dataset
+    
+    #Load current data
+    DataCL.load_data()
     
     #get Xdata and Ydata
     Xdata,Ydata=DataCL.get_axes(XchoiceTK,YchoiceTK)
