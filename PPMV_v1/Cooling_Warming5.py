@@ -74,6 +74,7 @@ def App_CoolingWarming(dataloc,machinetype):
     CW.Create_CWSettings(CW.rootApp,2,0)
     CW.Update_Bset.configure(command=lambda:bt.Button_UpdatePlotCW(CW.rootApp, 
                                                                    CW.canvas,
+                                                                   CW.Fig,
                                                                    CW.Plot,
                                                                    Data, 
                                                                    CW.Xchoice, 

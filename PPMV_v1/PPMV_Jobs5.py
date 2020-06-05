@@ -48,6 +48,9 @@ def Read_PPMS_File(DAT_name,MachineType):
     elif MachineType in ['Dynacool']:
         headerskip=30
         cols=[3,4,5]
+    elif MachineType in ['MPMS3']:
+        headerskip=40
+        cols=[2,3,15,58,60]
     else:
         NameError('Please specify MachineType as 9T, 14T, or Dynacool or _ACT varient')
     
@@ -56,7 +59,7 @@ def Read_PPMS_File(DAT_name,MachineType):
     if MachineType in ['9T-ACT','14t-ACT']:
        cols=cols+[12,13]
        
-    else:
+    elif MachineType in ['Dynacool']:
        cols=cols+[19,20,21]
         
     #Now load in the file and return as a Pandas data frame. 
@@ -67,8 +70,10 @@ def Read_PPMS_File(DAT_name,MachineType):
     if MachineType in ['9T-ACT','14t-ACT']:
        #skip bridge 3 for ACT pucks
        data.columns=['Temperature (K)','Field (Oe)', 'theta (deg)', 'Bridge1_R (ohms)','Bridge2_R (ohms)']
-    else:
+    elif MachineType in ['9T-R','14T-R','Dynacool']:
        data.columns=['Temperature (K)','Field (Oe)', 'theta (deg)', 'Bridge1_R (ohms)','Bridge2_R (ohms)','Bridge3_R (ohms)']
+    elif MachineType in ['MPMS3']:
+        data.columns=['Temperature (K)','Field (Oe)','AC Moment (emu)','DC Moment Fixed Ctr (emu)','DC Moment Free Ctr (emu)']
        
    #fill all NaNs with zeros
     data.fillna(0, inplace=True)

@@ -89,7 +89,7 @@ def Button_QuickPlot(DataCL,XchoiceTK,YchoiceTK):
     Xdata,Ydata=DataCL.get_axes(XchoiceTK,YchoiceTK)
     
     #quickplot data
-    ppmv.Job_QuickPlot(Xdata,Ydata)
+    ppmv.Job_QuickPlot(Xdata,Ydata,XchoiceTK.get(),YchoiceTK.get())
     
 def Button_QuickSave_CSV(DataCL):
     #Button to quickly save loaded file
@@ -143,7 +143,7 @@ def Button_ExportCW_CSVs(MasterTK,DataCL,XchoiceTK,YchoiceTK,CW_Toggle):
         #warn user that CW toggle is off
         tk.messagebox.showwarning('Warning','Please turn on the cooling/warming toggle\nto use this feature')
 
-def Button_UpdatePlotCW(MasterTK,canvas_PLT,Plot_PLT,DataCL,XchoiceTK,YchoiceTK,CW_Toggle,empty=False):
+def Button_UpdatePlotCW(MasterTK,canvas_PLT,Fig_PLT,Plot_PLT,DataCL,XchoiceTK,YchoiceTK,CW_Toggle,empty=False):
     #Updates figures for CW plots (potentially more?)
     #
     #New Variable types:
@@ -178,6 +178,7 @@ def Button_UpdatePlotCW(MasterTK,canvas_PLT,Plot_PLT,DataCL,XchoiceTK,YchoiceTK,
     
     Plot_PLT.relim()
     Plot_PLT.autoscale()
+    Fig_PLT.tight_layout()
     canvas_PLT.draw()
         
     

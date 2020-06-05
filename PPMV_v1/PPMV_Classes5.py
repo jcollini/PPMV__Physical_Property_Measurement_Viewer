@@ -258,7 +258,7 @@ class WidgetsPPMV():
         self.Loadmachine_L.grid(row=0,column=3)
         
        
-        self.Loadmachine_D=tk.OptionMenu(self.LoadFrame, self.Machine, self.optionsMachine)
+        self.Loadmachine_D=tk.OptionMenu(self.LoadFrame, self.Machine, *self.optionsMachine)
         self.Loadmachine_D.grid(row=0,column=4)
         
     def Create_EmptyPlot(self,MasterTK,row,column):
