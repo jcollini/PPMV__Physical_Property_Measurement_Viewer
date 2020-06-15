@@ -82,14 +82,15 @@ def App_CoolingWarming(dataloc,machinetype):
                                                                    CW.CW_Toggle))
     
     #make update button below the plot
-    Update_B=tk.Button(CW.rootApp,text='Update Plot',command=lambda:bt.Button_UpdatePlotCW(CW.rootApp, 
-                                                                                     CW.canvas,
-                                                                                     CW.Plot, 
-                                                                                     Data, 
-                                                                                     CW.Xchoice, 
-                                                                                     CW.Ychoice, 
-                                                                                     CW.CW_Toggle))
-    Update_B.grid(row=3,column=2,sticky=tk.E)
+    CW.Update_Bplot.configure(command=lambda:bt.Button_UpdatePlotCW(CW.rootApp, 
+                                                                     CW.canvas,
+                                                                     CW.Fig,
+                                                                     CW.Plot,
+                                                                     Data, 
+                                                                     CW.Xchoice, 
+                                                                     CW.Ychoice, 
+                                                                     CW.CW_Toggle))
+    
 
     
     

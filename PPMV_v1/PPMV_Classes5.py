@@ -270,6 +270,8 @@ class WidgetsPPMV():
     
         self.toolbarFrame.grid(row=row+1,column=column,columnspan=2)
         self.toolbar = NavigationToolbar2Tk(self.canvas, self.toolbarFrame)
+        self.Update_Bplot=tk.Button(MasterTK,text='Update Plot')
+        self.Update_Bplot.grid(row=3,column=2,sticky=tk.E)
     
     def Create_ExportFrame(self,MasterTK,row,column):
         self.ExportFrame=tk.LabelFrame(MasterTK,text='Save/Export')

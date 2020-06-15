@@ -59,7 +59,7 @@ def Read_PPMS_File(DAT_name,MachineType):
     if MachineType in ['9T-ACT','14t-ACT']:
        cols=cols+[12,13]
        
-    elif MachineType in ['Dynacool']:
+    elif MachineType in ['Dynacool','9T-R','14T-R']:
        cols=cols+[19,20,21]
         
     #Now load in the file and return as a Pandas data frame. 
