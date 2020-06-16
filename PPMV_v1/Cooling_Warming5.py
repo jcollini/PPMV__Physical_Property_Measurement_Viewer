@@ -49,7 +49,7 @@ def App_CoolingWarming(dataloc,machinetype):
     
     
 ####Plotting
-    CW.Create_EmptyPlot(CW.rootApp,2,1)
+    CW.Create_EmptyPlot(CW.rootApp,2,1,1,2)
     
     
 ####Save/Export frame

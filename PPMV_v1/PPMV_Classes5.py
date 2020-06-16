@@ -261,17 +261,17 @@ class WidgetsPPMV():
         self.Loadmachine_D=tk.OptionMenu(self.LoadFrame, self.Machine, *self.optionsMachine)
         self.Loadmachine_D.grid(row=0,column=4)
         
-    def Create_EmptyPlot(self,MasterTK,row,column):
+    def Create_EmptyPlot(self,MasterTK,row,column,rowspan_plot,columnspan_plot):
         #create plot and put on screen. Have it empty to start
         self.canvas,self.Fig,self.Plot,self.toolbarFrame=bt.Empty_Plot(MasterTK)
         #set plot to screen
-        self.canvas.get_tk_widget().grid(row=row,column=column,columnspan=2)
+        self.canvas.get_tk_widget().grid(row=row,column=column,rowspan=rowspan_plot,columnspan=columnspan_plot)
     
-    
-        self.toolbarFrame.grid(row=row+1,column=column,columnspan=2)
+        
+        self.toolbarFrame.grid(row=row+rowspan_plot,column=column,columnspan=columnspan_plot)
         self.toolbar = NavigationToolbar2Tk(self.canvas, self.toolbarFrame)
         self.Update_Bplot=tk.Button(MasterTK,text='Update Plot')
-        self.Update_Bplot.grid(row=3,column=2,sticky=tk.E)
+        self.Update_Bplot.grid(row=row+rowspan_plot,column=2,sticky=tk.E)
     
     def Create_ExportFrame(self,MasterTK,row,column):
         self.ExportFrame=tk.LabelFrame(MasterTK,text='Save/Export')
@@ -329,6 +329,113 @@ class WidgetsPPMV():
         #make update button for plot below settings settings
         self.Update_Bset=tk.Button(self.SetFrame,text='Update Plot')
         self.Update_Bset.grid(row=5,column=0) 
+        
+    def Create_PlotSettingsFrame(self,MasterTK,row,column):
+        self.PlotFrame=tk.LabelFrame(MasterTK,text='Plot Settings')
+        self.PlotFrame.grid(row=row,column=column)
+        #x and y axis drop down menu selection
+        self.Xchoice=tk.StringVar()
+        self.Ychoice=tk.StringVar()
+    
+        #set each as the usualy starting ones
+        self.Xchoice.set('Temperature (K)')
+        self.Ychoice.set('Bridge1_R (ohms)')
+    
+        #make menus
+        self.QuickP_Xchoice_L=tk.Label(self.PlotFrame,text='x axis')
+        self.QuickP_Xchoice_L.grid(row=0,column=0)
+        
+        self.QuickP_Ychoice_L=tk.Label(self.PlotFrame,text='y axis')
+        self.QuickP_Ychoice_L.grid(row=1,column=0,pady=(0,5))
+        
+        self.QuickP_Xchoice_D=tk.OptionMenu(self.PlotFrame, self.Xchoice, *self.dataNames)
+        self.QuickP_Xchoice_D.grid(row=0,column=1)
+        self.QuickP_Ychoice_D=tk.OptionMenu(self.PlotFrame, self.Ychoice, *self.dataNames)
+        self.QuickP_Ychoice_D.grid(row=1,column=1,pady=(0,5))
+        
+        #update plot
+        self.Update_Bsettings=tk.Button(self.PlotFrame,text='Update Plot')
+        self.Update_Bsettings.grid(row=0,column=2,rowspan=2)
+        
+    def Create_ParseSettingsFrame(self,MasterTK,row,column):
+        self.ParseFrame=tk.LabelFrame(MasterTK,text='Parse Data Settings')
+        self.ParseFrame.grid(row=row,column=column)
+    
+        #create empty lists to store labels and methods lists
+        self.Labels_ref=[]
+        self.Methods_ref=[]
+        self.DividerL_ref=[]
+        self.DividerM_ref=[]
+        self.Divider_names=[]
+    
+        #keep track of rownumbers
+        self.RowCount=tk.IntVar()
+        self.RowCount.set(1)
+    
+        #button to create a new list
+        self.Add_Row_B=tk.Button(self.ParseFrame,text='Create New Divider')
+        self.Add_Row_B.grid(row=0,column=0,columnspan=1)
+        
+        #buttton to remove item for list
+        self.Remove_Row_B=tk.Button(self.ParseFrame,text='Remove Divider')
+        self.Remove_Row_B.grid(row=0,column=1,columnspan=2)
+        
+    def generate_parse_section(self,MasterTK,labeltext):
+        #creates parse widgets
+        Method=tk.StringVar() #choice for menu
+        #Method.set('Shift_Direction')
+    
+        DataLabel=tk.StringVar()
+        #DataLabel.set('Temperature (K)')
+    
+        Divider_L=tk.Label(MasterTK,text=labeltext)
+        
+        Divider_Method=tk.OptionMenu(MasterTK,Method,'Shift_Direction',
+                           'Shift_Dynamic')
+    
+        Divider_Label=tk.OptionMenu(MasterTK,DataLabel,*self.dataNames)
+        
+        return Method,DataLabel,Divider_L,Divider_Method,Divider_Label
+        
+    def add_parse_section(self,MasterTK):
+        #creates Parse widgets and places them on the screen
+        #stores new reference widgets for labels and methods into a list
+        row=self.RowCount.get()
+        Method,DataLabel,Divider_L1,Divider_Method,Divider_Label=self.generate_parse_section(MasterTK,'Divider '+str(row)+':  ')
+        Divider_L1.grid(row=row,column=0)
+        Divider_Label.grid(row=row,column=1)
+        Divider_Method.grid(row=row,column=2)
+        
+        #update lists of widgets
+        self.Labels_ref.append(DataLabel)
+        self.Methods_ref.append(Method)
+        self.DividerL_ref.append(Divider_Label)
+        self.DividerM_ref.append(Divider_Method)
+        self.Divider_names.append(Divider_L1)
+        
+        #update row number
+        self.RowCount.set(row+1)
+        
+    def remove_parse_section(self,MasterTK):
+        
+        #update lists if not empty
+        if self.RowCount.get()>1:
+            row=self.RowCount.get()
+            self.RowCount.set(row-1)
+            
+            self.DividerL_ref[-1].grid_forget()
+            self.DividerM_ref[-1].grid_forget()
+            self.Divider_names[-1].grid_forget()
+        
+        
+        #deletes last parse section row
+        self.Labels_ref.pop()
+        self.Methods_ref.pop()
+        self.DividerL_ref.pop()
+        self.DividerM_ref.pop()
+        self.Divider_names.pop()
+        
+        
         
 
 class AppBox():

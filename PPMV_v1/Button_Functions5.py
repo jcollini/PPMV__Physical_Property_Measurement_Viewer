@@ -195,6 +195,64 @@ def Button_SaveFig(Fig_PLT):
     Fig_PLT.savefig(export_file_path)
     
 
+def Button_UpdatePlotDP(canvas_PLT,Plot_PLT,Data_CL,XchoiceTK,YchoiceTK,DP_Label_ref,DP_Method_ref):
+    #clear current plot
+    Plot_PLT.clear()
+    
+    #use dividers, if avaliable
+    if DP_Label_ref:
+        #reset parse lists
+        Data_CL.reset_parse()
+        
+        #add current lists of methods and labels to data class
+        Data_CL.add_parse(DP_Label_ref, DP_Method_ref)
+        
+        
+        #run class method to parseData with current info
+        Data_CL.parseData()
+        
+        #Plot Individual Data Sections
+        plotNum=len(DP_Label_ref)+1
+        for i in range(plotNum):
+            data=Data_CL.data_sections[i]
+            
+            #grab needed data
+            Xdata=data[XchoiceTK.get()]
+            Xname=XchoiceTK.get()
+        
+            Ydata=data[YchoiceTK.get()]
+            Yname=YchoiceTK.get()
+        
+            Plot_PLT.plot(Xdata,Ydata,label='Section '+str(i+1)+': '+Data_CL.parse_results[i])
+            Plot_PLT.set_xlabel(Xname)
+            Plot_PLT.set_ylabel(Yname)
+            Plot_PLT.legend(loc='best')
+                
+            
+            
+    else:
+        #otherwise, just plot the data as is
+        data=Data_CL.data
+        
+        #grab needed data
+        Xdata=data[XchoiceTK.get()]
+        Xname=XchoiceTK.get()
+        
+        Ydata=data[YchoiceTK.get()]
+        Yname=YchoiceTK.get()
+        
+        Plot_PLT.plot(Xdata,Ydata)
+        Plot_PLT.set_xlabel(Xname)
+        Plot_PLT.set_ylabel(Yname)
+        
+    #redraw canvas with ticks inside
+    Plot_PLT.tick_params(direction='in')
+    
+    Plot_PLT.relim()
+    Plot_PLT.autoscale()
+    canvas_PLT.draw()
+    
+
 
 """
 #### Object Creation Functions ####
