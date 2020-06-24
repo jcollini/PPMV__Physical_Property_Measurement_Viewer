@@ -367,44 +367,69 @@ class WidgetsPPMV():
         self.DividerL_ref=[]
         self.DividerM_ref=[]
         self.Divider_names=[]
+        self.Divider_Legend_widget=[]
+        self.Divider_Legend_names=[]
     
         #keep track of rownumbers
         self.RowCount=tk.IntVar()
-        self.RowCount.set(1)
+        self.RowCount.set(2)
+        
+        #explanation for settings
+        self.Explain_L=tk.Label(self.ParseFrame,text='For each divider, select the data \nused to split and the method for splitting')
+        self.Explain_L.grid(row=0,column=0,columnspan=3)
     
         #button to create a new list
         self.Add_Row_B=tk.Button(self.ParseFrame,text='Create New Divider')
-        self.Add_Row_B.grid(row=0,column=0,columnspan=1)
+        self.Add_Row_B.grid(row=1,column=0,columnspan=1)
         
         #buttton to remove item for list
         self.Remove_Row_B=tk.Button(self.ParseFrame,text='Remove Divider')
-        self.Remove_Row_B.grid(row=0,column=1,columnspan=2)
+        self.Remove_Row_B.grid(row=1,column=1,columnspan=2)
         
     def generate_parse_section(self,MasterTK,labeltext):
         #creates parse widgets
-        Method=tk.StringVar() #choice for menu
-        #Method.set('Shift_Direction')
-    
-        DataLabel=tk.StringVar()
-        #DataLabel.set('Temperature (K)')
-    
-        Divider_L=tk.Label(MasterTK,text=labeltext)
         
+        #Menu string choice for method of split
+        Method=tk.StringVar() 
+        #String choice for selecting a data column
+        DataLabel=tk.StringVar()
+        #string choice for legend
+        Legend=tk.StringVar()
+        Legend.set('Insert Data Name')
+        
+        #simple label telling user what label number you are on
+        Divider_L=tk.Label(MasterTK,text=labeltext)
+        #menu option widget for methods
         Divider_Method=tk.OptionMenu(MasterTK,Method,'Shift_Direction',
                            'Shift_Dynamic')
-    
+        #menu option widget for data columns
         Divider_Label=tk.OptionMenu(MasterTK,DataLabel,*self.dataNames)
+        #label entry for user's legend
+        Divider_Legend=tk.Entry(MasterTK,textvariable=Legend)
         
-        return Method,DataLabel,Divider_L,Divider_Method,Divider_Label
+        return Method,DataLabel,Divider_L,Divider_Method,Divider_Label,Divider_Legend,Legend
         
     def add_parse_section(self,MasterTK):
         #creates Parse widgets and places them on the screen
         #stores new reference widgets for labels and methods into a list
         row=self.RowCount.get()
-        Method,DataLabel,Divider_L1,Divider_Method,Divider_Label=self.generate_parse_section(MasterTK,'Divider '+str(row)+':  ')
+        
+        #if it's the first row, create a starting label
+        if row==2:
+            Starter_Label=tk.StringVar()
+            Starter_Label.set('Insert Data Name')
+            
+            First_Label=tk.Entry(MasterTK,textvariable=Starter_Label)
+            First_Label.grid(row=row,column=3)
+            self.Divider_Legend_widget.append(First_Label)
+            self.Divider_Legend_names.append(Starter_Label)
+            row=row+1
+        
+        Method,DataLabel,Divider_L1,Divider_Method,Divider_Label,Divider_Legend,Legend=self.generate_parse_section(MasterTK,'Divider '+str(row-2)+':  ')
         Divider_L1.grid(row=row,column=0)
         Divider_Label.grid(row=row,column=1)
         Divider_Method.grid(row=row,column=2)
+        Divider_Legend.grid(row=row,column=3)
         
         #update lists of widgets
         self.Labels_ref.append(DataLabel)
@@ -412,6 +437,8 @@ class WidgetsPPMV():
         self.DividerL_ref.append(Divider_Label)
         self.DividerM_ref.append(Divider_Method)
         self.Divider_names.append(Divider_L1)
+        self.Divider_Legend_widget.append(Divider_Legend)
+        self.Divider_Legend_names.append(Legend)
         
         #update row number
         self.RowCount.set(row+1)
@@ -419,13 +446,28 @@ class WidgetsPPMV():
     def remove_parse_section(self,MasterTK):
         
         #update lists if not empty
-        if self.RowCount.get()>1:
+        if self.RowCount.get()>4:
             row=self.RowCount.get()
             self.RowCount.set(row-1)
             
             self.DividerL_ref[-1].grid_forget()
             self.DividerM_ref[-1].grid_forget()
             self.Divider_names[-1].grid_forget()
+            self.Divider_Legend_widget[-1].grid_forget()
+        
+        elif self.RowCount.get()==4:
+            #special case, need to remove even initial first label as well
+            row=self.RowCount.get()
+            self.RowCount.set(row-2)
+            
+            self.DividerL_ref[-1].grid_forget()
+            self.DividerM_ref[-1].grid_forget()
+            self.Divider_names[-1].grid_forget()
+            self.Divider_Legend_widget[-1].grid_forget()
+            self.Divider_Legend_widget[-2].grid_forget()
+            
+            self.Divider_Legend_names.pop()
+            self.Divider_Legend_widget.pop()
         
         
         #deletes last parse section row
@@ -434,6 +476,10 @@ class WidgetsPPMV():
         self.DividerL_ref.pop()
         self.DividerM_ref.pop()
         self.Divider_names.pop()
+        self.Divider_Legend_names.pop()
+        self.Divider_Legend_widget.pop()
+        
+        
         
         
         

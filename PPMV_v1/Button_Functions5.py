@@ -142,6 +142,50 @@ def Button_ExportCW_CSVs(MasterTK,DataCL,XchoiceTK,YchoiceTK,CW_Toggle):
     else:
         #warn user that CW toggle is off
         tk.messagebox.showwarning('Warning','Please turn on the cooling/warming toggle\nto use this feature')
+        
+def Button_ExportDP_CSVs(Data_CL,DP_Label_ref,DP_Method_ref,DP_Legends_ref):
+    
+   
+    
+    #load current data
+    Data_CL.load_data()
+    
+    
+    #use dividers, if avaliable
+    if DP_Label_ref:
+         #Ask user for basefilename
+        base_file_path = filedialog.asksaveasfilename(filetypes=(('Enter one name',''),('Enter one name','')))
+        
+        #reset parse lists
+        Data_CL.reset_parse()
+        
+        #add current lists of methods and labels to data class
+        Data_CL.add_parse(DP_Label_ref, DP_Method_ref)
+        
+        #run class method to parseData with current info
+        Data_CL.parseData()
+        
+        #Export each set to a csv file
+        plotNum=len(DP_Label_ref)+1
+        for i in range(plotNum):
+            print('Saving CSV section '+str(i+1))
+            data=Data_CL.data_sections[i]
+            
+            #use the usernames for labels, if given
+            if DP_Legends_ref[i].get() != 'Insert Data Name':
+                fn=base_file_path+DP_Legends_ref[i].get()+'.csv'
+            else:
+                fn=base_file_path+'Section_'+str(i+1)+'_'+Data_CL.parse_results[i]
+            
+            #save with final filename
+            data.to_csv(fn,index=False)
+            
+            
+                
+            
+            
+    else:
+       print('please use a divider to use this feature')
 
 def Button_UpdatePlotCW(MasterTK,canvas_PLT,Fig_PLT,Plot_PLT,DataCL,XchoiceTK,YchoiceTK,CW_Toggle,empty=False):
     #Updates figures for CW plots (potentially more?)
@@ -195,7 +239,12 @@ def Button_SaveFig(Fig_PLT):
     Fig_PLT.savefig(export_file_path)
     
 
-def Button_UpdatePlotDP(canvas_PLT,Plot_PLT,Data_CL,XchoiceTK,YchoiceTK,DP_Label_ref,DP_Method_ref):
+    
+    
+def Button_UpdatePlotDP(canvas_PLT,Plot_PLT,Data_CL,XchoiceTK,YchoiceTK,DP_Label_ref,DP_Method_ref,DP_Legends_ref):
+    #load current data
+    Data_CL.load_data()
+    
     #clear current plot
     Plot_PLT.clear()
     
@@ -207,13 +256,13 @@ def Button_UpdatePlotDP(canvas_PLT,Plot_PLT,Data_CL,XchoiceTK,YchoiceTK,DP_Label
         #add current lists of methods and labels to data class
         Data_CL.add_parse(DP_Label_ref, DP_Method_ref)
         
-        
         #run class method to parseData with current info
         Data_CL.parseData()
         
         #Plot Individual Data Sections
         plotNum=len(DP_Label_ref)+1
         for i in range(plotNum):
+            print(i)
             data=Data_CL.data_sections[i]
             
             #grab needed data
@@ -222,8 +271,12 @@ def Button_UpdatePlotDP(canvas_PLT,Plot_PLT,Data_CL,XchoiceTK,YchoiceTK,DP_Label
         
             Ydata=data[YchoiceTK.get()]
             Yname=YchoiceTK.get()
-        
-            Plot_PLT.plot(Xdata,Ydata,label='Section '+str(i+1)+': '+Data_CL.parse_results[i])
+            
+            #if user has a legend name, place that inside instead
+            if DP_Legends_ref[i].get() != 'Insert Data Name':
+                Plot_PLT.plot(Xdata,Ydata,label=DP_Legends_ref[i].get())
+            else:
+                Plot_PLT.plot(Xdata,Ydata,label='Section '+str(i+1)+': '+Data_CL.parse_results[i])
             Plot_PLT.set_xlabel(Xname)
             Plot_PLT.set_ylabel(Yname)
             Plot_PLT.legend(loc='best')
@@ -233,6 +286,7 @@ def Button_UpdatePlotDP(canvas_PLT,Plot_PLT,Data_CL,XchoiceTK,YchoiceTK,DP_Label
     else:
         #otherwise, just plot the data as is
         data=Data_CL.data
+        print(data.columns)
         
         #grab needed data
         Xdata=data[XchoiceTK.get()]
