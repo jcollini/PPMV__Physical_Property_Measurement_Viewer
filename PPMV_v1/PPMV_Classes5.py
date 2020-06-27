@@ -496,6 +496,9 @@ class AppBox():
         self.JobFrame_Ysize=56
         #Padding if there is missing lines for the explaination text
         self.LinePadding=12
+        #Padding for icons
+        self.icon_spacingx=55
+        self.icon_spacingy=55
         
         self.ExFrameY=5 #boarder space around export frame
         self.ExportPadding=50 #seperation of export buttons
@@ -528,7 +531,6 @@ class AppBox():
         self.PlotFrame.grid(row=self.row,column=self.column,padx=10,pady=10)
     
         #plot icon
-        print(self.icon)
         Icon=Image.open(self.icon)
         IconPic=ImageTk.PhotoImage(Icon)
         self.QuickP_icon=tk.Label(self.PlotFrame,image=IconPic)
@@ -536,7 +538,7 @@ class AppBox():
         self.QuickP_icon.grid(row=0,column=0,columnspan=2)
     
         #plot explanation
-        self.QuickP_explain=tk.Label(self.PlotFrame,text='Plot your loaded data.\nPick x and y axis from menu.')
+        self.QuickP_explain=tk.Label(self.PlotFrame,text='Quick Plot\nPick x and y axis from menu.')
         self.QuickP_explain.grid(row=1,column=0,columnspan=2)
         
         #plot button
@@ -565,19 +567,25 @@ class AppBox():
         
         
     def Create_Export(self):
-        self.ExportFrame=tk.LabelFrame(self.MasterTK,text='Export Frame')
+        self.ExportFrame=tk.LabelFrame(self.MasterTK)
         self.ExportFrame.grid(row=self.row,column=self.column,padx=10,pady=10)
     
         #explort icon and explanation
-        self.Export_icon=tk.Label(self.ExportFrame,text='***Export Icon***')
-        self.Export_icon.grid(row=0,column=0)
+        Icon=Image.open(self.icon)
+        IconPic=ImageTk.PhotoImage(Icon)
+        self.Export_icon=tk.Label(self.ExportFrame,image=IconPic)
+        self.Export_icon.image=IconPic
+        self.Export_icon.grid(row=0,column=0,padx=self.icon_spacingx)
+        
+        self.Export_title=tk.Label(self.ExportFrame,text='Quick Export',font=('Standard Symbols L',10))
+        self.Export_title.grid(row=1,column=0)
     
-        self.Export_explain=tk.Label(self.ExportFrame,text='Export PPMS data \nto CSV.')
-        self.Export_explain.grid(row=1,column=0)
+        self.Export_explain=tk.Label(self.ExportFrame,text='Export PPMS data\nto CSV.')
+        self.Export_explain.grid(row=2,column=0,pady=(0,self.icon_spacingy))
     
         #Simple File Output button
-        self.Export_file_B=tk.Button(self.ExportFrame,text='Export (.dat) data \n to (.csv)')
-        self.Export_file_B.grid(row=2,column=0,pady=(self.JobFrame_Ysize,5),padx=45)
+        self.Export_file_B=tk.Button(self.ExportFrame,text='Quick Export')
+        self.Export_file_B.grid(row=3,column=0)
         
         
     def Create_Launcher(self,AppIcon,AppText):

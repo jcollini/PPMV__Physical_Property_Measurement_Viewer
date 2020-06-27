@@ -73,7 +73,7 @@ if __name__=='__main__':
                                                            PlotApp.Ychoice))
     
 ####Export CSV Frame
-    ExpApp=cl.AppBox(JobsFrame, 'Export Frame','', 0, 1)
+    ExpApp=cl.AppBox(JobsFrame, 'Export Frame','Icon_Quick_Export.png', 0, 1)
     ExpApp.Create_Export()
     
     #Simple File Output button
