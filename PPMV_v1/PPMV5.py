@@ -64,7 +64,7 @@ if __name__=='__main__':
     JobsFrame.grid(row=2,column=0,padx=10,pady=(0,10),sticky=tk.W)
     
 ####quick plot frame and widges
-    PlotApp=cl.AppBox(JobsFrame,'Plot Frame', 0, 0)
+    PlotApp=cl.AppBox(JobsFrame,'Plot Frame','Icon_Quick_Plot.png', 0, 0)
     PlotApp.Create_QuickPlot()
     
     #plot button
@@ -72,9 +72,8 @@ if __name__=='__main__':
                                                            PlotApp.Xchoice, 
                                                            PlotApp.Ychoice))
     
-    
 ####Export CSV Frame
-    ExpApp=cl.AppBox(JobsFrame, 'Export Frame', 0, 1)
+    ExpApp=cl.AppBox(JobsFrame, 'Export Frame','', 0, 1)
     ExpApp.Create_Export()
     
     #Simple File Output button
@@ -82,7 +81,7 @@ if __name__=='__main__':
     
     
 ####Cooling and Warming Frame
-    CWApp=cl.AppBox(JobsFrame, 'Cooling and Warming', 0, 2)
+    CWApp=cl.AppBox(JobsFrame, 'Cooling and Warming','', 0, 2)
     CWApp.Create_Launcher('***CW Icon***', 'Application for seperating \nand plotting cooling \nand warming curves')
     
     #Simple File Output button
@@ -90,19 +89,19 @@ if __name__=='__main__':
     
     
 ####Magnetoresistance Frame'
-    MagApp=cl.AppBox(JobsFrame,'Magnetoresistance',0,3)
+    MagApp=cl.AppBox(JobsFrame,'Magnetoresistance','',0,3)
     MagApp.Create_Launcher('***MR Icon***', 'Application for seperating \n and plotting \nmagnetoresistance curves')
     
     
 
 ####Advanced Plot Frame
-    AdvPlotApp=cl.AppBox(JobsFrame, 'Advanced Plotting', 1, 0)
+    AdvPlotApp=cl.AppBox(JobsFrame, 'Advanced Plotting','', 1, 0)
     AdvPlotApp.Create_Launcher('***Adv Plot Icon***', 'Application showing advanced \nplot settings for data\n')
     
     
 
 ####Custom PPMS File Editor 
-    CustomApp=cl.AppBox(JobsFrame, 'Parse Data', 1, 1)
+    CustomApp=cl.AppBox(JobsFrame, 'Parse Data','', 1, 1)
     CustomApp.Create_Launcher('***Parse Icon***', 'Application for editting \nand parsing PPMS data\n')
     
     CustomApp.App_B.configure(command=lambda: dp.App_DataParaser(PPMV.DataLoc.get(), PPMV.Machine.get()))

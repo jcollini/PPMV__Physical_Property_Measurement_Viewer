@@ -14,6 +14,7 @@ from matplotlib.backend_bases import key_press_handler
 from tkinter import filedialog
 from scipy.optimize import curve_fit
 from random import randint
+from PIL import Image,ImageTk
 
 
 import Button_Functions5 as bt
@@ -488,7 +489,7 @@ class AppBox():
     
     
     
-    def __init__(self,MasterTK,title,row,column):
+    def __init__(self,MasterTK,title,icon,row,column):
         
         #General padding to have frames match
         self.JobFrame_Ysize=56
@@ -518,13 +519,19 @@ class AppBox():
         self.row=row
         self.column=column
         self.MasterTK=MasterTK
+        self.icon=icon
         
     def Create_QuickPlot(self):
-        self.PlotFrame=tk.LabelFrame(self.MasterTK,text='Plot Frame')
+        #self.PlotFrame=tk.LabelFrame(self.MasterTK,text='Plot Frame',bg='white')
+        self.PlotFrame=tk.LabelFrame(self.MasterTK)
         self.PlotFrame.grid(row=self.row,column=self.column,padx=10,pady=10)
     
         #plot icon
-        self.QuickP_icon=tk.Label(self.PlotFrame,text='***Plot Icon***')
+        print(self.icon)
+        Icon=Image.open(self.icon)
+        IconPic=ImageTk.PhotoImage(Icon)
+        self.QuickP_icon=tk.Label(self.PlotFrame,image=IconPic)
+        self.QuickP_icon.image=IconPic
         self.QuickP_icon.grid(row=0,column=0,columnspan=2)
     
         #plot explanation
