@@ -60,7 +60,7 @@ if __name__=='__main__':
    
 
 ####Jobs Frame 
-    JobsFrame=tk.LabelFrame(PPMV.root,text='Jobs Frame')
+    JobsFrame=tk.LabelFrame(PPMV.root)
     JobsFrame.grid(row=2,column=0,padx=10,pady=(0,10),sticky=tk.W)
     
 ####quick plot frame and widges

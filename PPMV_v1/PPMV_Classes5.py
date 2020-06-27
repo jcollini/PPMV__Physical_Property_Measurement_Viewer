@@ -180,6 +180,7 @@ class WidgetsPPMV():
     def Create_Root(self,title,icon):
         #controls rool application window
         self.root=tk.Tk()
+        #self.root.configure(bg='#525F88')
         self.root.title(title)
         self.root.iconbitmap(icon)
         
