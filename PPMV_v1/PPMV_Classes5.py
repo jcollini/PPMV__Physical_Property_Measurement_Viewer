@@ -196,8 +196,8 @@ class WidgetsPPMV():
         self.Header_L.grid(row=row,column=column,pady=(0,10))
         
     def Create_RootLoadFrame(self,MasterTK,row,column):
-        self.LoadFrame=tk.LabelFrame(MasterTK,text='Load PPMS Data',padx=194)
-        self.LoadFrame.grid(row=row,column=column,padx=10,sticky=tk.W)
+        self.LoadFrame=tk.LabelFrame(MasterTK,text='Load PPMS Data',padx=195)
+        self.LoadFrame.grid(row=row,column=column,padx=10,pady=(0,15))
     
         #Widgets and placement
         #file and machine selection for data
@@ -531,6 +531,7 @@ class AppBox():
         self.PlotFrame.grid(row=self.row,column=self.column,padx=10,pady=10)
     
         #plot icon
+        print(self.icon)
         Icon=Image.open(self.icon)
         IconPic=ImageTk.PhotoImage(Icon)
         self.QuickP_icon=tk.Label(self.PlotFrame,image=IconPic)
@@ -538,12 +539,14 @@ class AppBox():
         self.QuickP_icon.grid(row=0,column=0,columnspan=2)
     
         #plot explanation
-        self.QuickP_explain=tk.Label(self.PlotFrame,text='Quick Plot\nPick x and y axis from menu.')
-        self.QuickP_explain.grid(row=1,column=0,columnspan=2)
+        self.QuickP_title=tk.Label(self.PlotFrame,text='Quick Plot',font=('Standard Symbols L',10))
+        self.QuickP_explain=tk.Label(self.PlotFrame,text='Pick x and y axis from menu.')
+        self.QuickP_title.grid(row=1,column=0,columnspan=2)
+        self.QuickP_explain.grid(row=2,column=0,columnspan=2)
         
         #plot button
         self.QuickP_B=tk.Button(self.PlotFrame,text='Quick Plot')
-        self.QuickP_B.grid(row=2,column=0,columnspan=2)
+        self.QuickP_B.grid(row=3,column=0,columnspan=2)
         
         #x and y axis drop down menu selection
         self.Xchoice=tk.StringVar()
@@ -553,17 +556,17 @@ class AppBox():
         self.Ychoice.set('Bridge1_R (ohms)')
         #make menus
         self.QuickP_Xchoice_L=tk.Label(self.PlotFrame,text='x axis')
-        self.QuickP_Xchoice_L.grid(row=3,column=0)
+        self.QuickP_Xchoice_L.grid(row=4,column=0)
     
         self.QuickP_Ychoice_L=tk.Label(self.PlotFrame,text='y axis')
-        self.QuickP_Ychoice_L.grid(row=4,column=0,pady=(0,5))
+        self.QuickP_Ychoice_L.grid(row=5,column=0,pady=(0,5))
         
         
         
         self.QuickP_Xchoice_D=tk.OptionMenu(self.PlotFrame, self.Xchoice, *self.dataNames)
-        self.QuickP_Xchoice_D.grid(row=3,column=1)
+        self.QuickP_Xchoice_D.grid(row=4,column=1)
         self.QuickP_Ychoice_D=tk.OptionMenu(self.PlotFrame, self.Ychoice, *self.dataNames)
-        self.QuickP_Ychoice_D.grid(row=4,column=1,pady=(0,5))
+        self.QuickP_Ychoice_D.grid(row=5,column=1,pady=(0,5))
         
         
     def Create_Export(self):
@@ -588,19 +591,28 @@ class AppBox():
         self.Export_file_B.grid(row=3,column=0)
         
         
-    def Create_Launcher(self,AppIcon,AppText):
-        self.AppFrame=tk.LabelFrame(self.MasterTK,text=self.title)
+    def Create_Launcher(self,AppText):
+        
+        self.AppFrame=tk.LabelFrame(self.MasterTK)
         self.AppFrame.grid(row=self.row,column=self.column,padx=10,pady=10)
     
         #explort icon and explanation
-        self.App_icon=tk.Label(self.AppFrame,text=AppIcon)
-        self.App_icon.grid(row=0,column=0)
+        #explort icon and explanation
+        Icon=Image.open(self.icon)
+        IconPic=ImageTk.PhotoImage(Icon)
+        self.App_icon=tk.Label(self.AppFrame,image=IconPic)
+        self.App_icon.image=IconPic
+        self.App_icon.grid(row=0,column=0,padx=self.icon_spacingx)
+        
+        self.App_title=tk.Label(self.AppFrame,text=self.title,font=('Standard Symbols L',10))
+        self.App_title.grid(row=1,column=0)
     
         self.App_explain=tk.Label(self.AppFrame,text=AppText)
-        self.App_explain.grid(row=1,column=0)
+        self.App_explain.grid(row=2,column=0,pady=(0,self.icon_spacingy-5))
+        
     
         #Simple File Output button
         self.App_B=tk.Button(self.AppFrame,text=self.title)
-        self.App_B.grid(row=2,column=0,pady=(self.JobFrame_Ysize,5),padx=32)
+        self.App_B.grid(row=3,column=0,pady=(0,5),padx=32)
         
         

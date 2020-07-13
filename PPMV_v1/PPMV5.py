@@ -81,28 +81,28 @@ if __name__=='__main__':
     
     
 ####Cooling and Warming Frame
-    CWApp=cl.AppBox(JobsFrame, 'Cooling and Warming','', 0, 2)
-    CWApp.Create_Launcher('***CW Icon***', 'Application for seperating \nand plotting cooling \nand warming curves')
+    CWApp=cl.AppBox(JobsFrame, 'Cooling and Warming','Icon_CW.png', 0, 2)
+    CWApp.Create_Launcher('Seperating and plotting cooling \nand warming curves')
     
     #Simple File Output button
     CWApp.App_B.configure(command=lambda: cw.App_CoolingWarming(PPMV.DataLoc.get(), PPMV.Machine.get()))
     
     
 ####Magnetoresistance Frame'
-    MagApp=cl.AppBox(JobsFrame,'Magnetoresistance','',0,3)
-    MagApp.Create_Launcher('***MR Icon***', 'Application for seperating \n and plotting \nmagnetoresistance curves')
+    MagApp=cl.AppBox(JobsFrame,'Magnetoresistance','Icon_MR.png',0,3)
+    MagApp.Create_Launcher('Seperating and plotting \nmagnetoresistance curves')
     
     
 
 ####Advanced Plot Frame
-    AdvPlotApp=cl.AppBox(JobsFrame, 'Advanced Plotting','', 1, 0)
-    AdvPlotApp.Create_Launcher('***Adv Plot Icon***', 'Application showing advanced \nplot settings for data\n')
+    AdvPlotApp=cl.AppBox(JobsFrame, 'Advanced Plotting','Icon_empty.png', 1, 0)
+    AdvPlotApp.Create_Launcher('Application showing advanced \nplot settings for data')
     
     
 
 ####Custom PPMS File Editor 
-    CustomApp=cl.AppBox(JobsFrame, 'Parse Data','', 1, 1)
-    CustomApp.Create_Launcher('***Parse Icon***', 'Application for editting \nand parsing PPMS data\n')
+    CustomApp=cl.AppBox(JobsFrame, 'Parse Data','Icon_empty.png', 1, 1)
+    CustomApp.Create_Launcher('Application for editting \nand parsing PPMS data')
     
     CustomApp.App_B.configure(command=lambda: dp.App_DataParaser(PPMV.DataLoc.get(), PPMV.Machine.get()))
     
