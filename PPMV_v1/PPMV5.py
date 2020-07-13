@@ -22,6 +22,7 @@ import PPMV_Classes5 as cl
 
 import Cooling_Warming5 as cw
 import Data_Paraser5 as dp
+import Magnetometry5 as chi
 """
 Designer and Programer: John Collini
 Front end design for PPMV (Physical Property Measurement Viewer)
@@ -105,7 +106,15 @@ if __name__=='__main__':
     CustomApp.Create_Launcher('Application for editting \nand parsing PPMS data')
     
     CustomApp.App_B.configure(command=lambda: dp.App_DataParaser(PPMV.DataLoc.get(), PPMV.Machine.get()))
+
+####Magnetometery Frame
+    ChiApp=cl.AppBox(JobsFrame, 'Magnetometry','Icon_Chi.png', 1, 2)
+    ChiApp.Create_Launcher('Simple manipulation for\nMPMPS files')
     
+    #Simple File Output button
+    ChiApp.App_B.configure(command=lambda: chi.App_Magnetometry(PPMV.DataLoc.get(), PPMV.Machine.get()))
+    
+       
     
 
 ####Loaded Data

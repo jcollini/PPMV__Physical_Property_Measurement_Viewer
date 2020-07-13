@@ -332,6 +332,72 @@ class WidgetsPPMV():
         self.Update_Bset=tk.Button(self.SetFrame,text='Update Plot')
         self.Update_Bset.grid(row=5,column=0) 
         
+    def Create_ChiSettingsFrame(self,MasterTK,row,column):
+        self.SetFrame=tk.LabelFrame(MasterTK,text='Settings')
+        self.SetFrame.grid(row=row,column=column)
+        
+        #1st direction: pick axes
+        help1='Select your data transformation type'
+        self.Direction1=tk.Label(self.SetFrame,text=help1)
+        self.Direction1.grid(row=0,column=0,columnspan=3)
+        
+        #Chi selection
+        self.Chi_Toggle=tk.StringVar()
+        self.Chi_Toggle.set('M (emu)')
+        
+        self.RadioM=tk.Radiobutton(self.SetFrame,text='M (emu)',variable=self.Chi_Toggle, value='M (emu)')
+        self.RadioM.grid(row=1,column=0)
+        
+        self.RadioMu=tk.Radiobutton(self.SetFrame,text='Mu (emu/mole)',variable=self.Chi_Toggle, value='M (emu/mole)')
+        self.RadioMu.grid(row=1,column=1)
+        
+        self.RadioChi=tk.Radiobutton(self.SetFrame,text='Chi (emu/[mole Oe])',variable=self.Chi_Toggle, value='M (emu/[mole Oe])')
+        self.RadioChi.grid(row=1,column=2)
+        
+        #Mass entry
+        self.MassSample=tk.DoubleVar()
+        self.MassSample.set(0)
+        
+        self.MolarSample=tk.DoubleVar()
+        self.MolarSample.set(0)
+        
+        self.MassL=tk.Label(self.SetFrame,text='Mass (g)')
+        self.MassE=tk.Entry(self.SetFrame,textvariable=self.MassSample)
+        
+        self.MassL.grid(row=2,column=0,pady=(10,0))
+        self.MassE.grid(row=2,column=1,pady=(10,0))
+        
+        self.MolarL=tk.Label(self.SetFrame,text='Molar Mass (g)')
+        self.MolarE=tk.Entry(self.SetFrame,textvariable=self.MolarSample)
+        
+        self.MolarL.grid(row=3,column=0,pady=(0,10))
+        self.MolarE.grid(row=3,column=1,pady=(0,10))
+        
+        #x and y axis drop down menu selection
+        self.Xchoice=tk.StringVar()
+        self.Ychoice=tk.StringVar()
+        
+        #set each as the usualy starting ones
+        self.Xchoice.set('Temperature (K)')
+        self.Ychoice.set('DC Moment Fixed Ctr (emu)')
+        
+        #make menus
+        self.QuickP_Xchoice_L=tk.Label(self.SetFrame,text='x axis')
+        self.QuickP_Xchoice_L.grid(row=4,column=0)
+        
+        self.QuickP_Ychoice_L=tk.Label(self.SetFrame,text='y axis')
+        self.QuickP_Ychoice_L.grid(row=5,column=0,pady=(0,5))
+       
+        self.QuickP_Xchoice_D=tk.OptionMenu(self.SetFrame, self.Xchoice, *self.dataNames)
+        self.QuickP_Xchoice_D.grid(row=4,column=1)
+        self.QuickP_Ychoice_D=tk.OptionMenu(self.SetFrame, self.Ychoice, *self.dataNames)
+        self.QuickP_Ychoice_D.grid(row=5,column=1,pady=(0,5))
+    
+        #make update button for plot below settings settings
+        self.Update_Bset=tk.Button(self.SetFrame,text='Update Plot')
+        self.Update_Bset.grid(row=6,column=0,pady=(10,0))
+        
+        
     def Create_PlotSettingsFrame(self,MasterTK,row,column):
         self.PlotFrame=tk.LabelFrame(MasterTK,text='Plot Settings')
         self.PlotFrame.grid(row=row,column=column)
@@ -531,7 +597,6 @@ class AppBox():
         self.PlotFrame.grid(row=self.row,column=self.column,padx=10,pady=10)
     
         #plot icon
-        print(self.icon)
         Icon=Image.open(self.icon)
         IconPic=ImageTk.PhotoImage(Icon)
         self.QuickP_icon=tk.Label(self.PlotFrame,image=IconPic)
