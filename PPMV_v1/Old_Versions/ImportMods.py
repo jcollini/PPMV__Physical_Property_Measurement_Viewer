@@ -1,6 +1,7 @@
 """
 Imports needed for all applications
 """
+
 import tkinter as tk
 import numpy as np
 import pandas as pd
@@ -13,13 +14,11 @@ from matplotlib.backend_bases import key_press_handler
 from tkinter import filedialog
 from scipy.optimize import curve_fit
 from random import randint
-from PIL import Image,ImageTk
 
 
-import Button_Functions as bt
-import PPMV_Jobs as ppmv
-import PPMV_Classes as cl
+import Button_Functions5 as bt
+import PPMV_Jobs5 as ppmv
+import PPMV_Classes5 as cl
 
-import Cooling_Warming as cw
-import Data_Paraser as dp
-import Magnetometry as chi
+import Cooling_Warming5 as cw
+import Data_Paraser5 as dp

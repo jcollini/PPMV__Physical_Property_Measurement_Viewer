@@ -225,5 +225,17 @@ def Job_CW_Split_Data(Xdata,Ydata):
     return X1,Y1,X2,Y2
     
 
-
+def Job_CalcMU(T,M,massSample,massMolar):
+    #calculates Mu from M,T,massSample, massMolar for magnetometry
+    #plot and save data from an MPMS
+    #massSample in g
+    #massMolas in g
     
+    #convert M to Mu [emu/mole]
+    MU=M*massMolar/massSample
+    return MU
+
+def Job_CalcChi(T,Field,M,massSample,massMolar):
+    #convert M to Chi [emu/mole/Oe]
+    Chi=M*massMolar/massSample/Field
+    return Chi

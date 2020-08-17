@@ -14,14 +14,16 @@ from matplotlib.backend_bases import key_press_handler
 from tkinter import filedialog
 from scipy.optimize import curve_fit
 from random import randint
+from PIL import Image,ImageTk
 
 
-import Button_Functions5 as bt
-import PPMV_Jobs5 as ppmv
-import PPMV_Classes5 as cl
+import Button_Functions as bt
+import PPMV_Jobs as ppmv
+import PPMV_Classes as cl
 
-import Cooling_Warming5 as cw
-import Data_Paraser5 as dp
+import Cooling_Warming as cw
+import Data_Paraser as dp
+import Magnetometry as chi
 """
 Variable Input Names
 <object> variables:
@@ -205,14 +207,14 @@ def Button_UpdatePlotCW(MasterTK,canvas_PLT,Fig_PLT,Plot_PLT,DataCL,XchoiceTK,Yc
         #Split data
         X1,Y1,X2,Y2=ppmv.Job_CW_Split_Data(Xdata, Ydata)
         #overwrite original fig and plot with new split data
-        Plot_PLT.plot(X1,Y1,'b',label='cool down')
-        Plot_PLT.plot(X2,Y2,'r',label='warm up')
+        Plot_PLT.plot(X1,Y1,'b.',label='cool down')
+        Plot_PLT.plot(X2,Y2,'r.',label='warm up')
         Plot_PLT.legend(loc='best')
         Plot_PLT.set_xlabel(XchoiceTK.get())
         Plot_PLT.set_ylabel(YchoiceTK.get())
     else:
         #overwrite original fig and plot with unsplit data
-        Plot_PLT.plot(Xdata,Ydata)
+        Plot_PLT.plot(Xdata,Ydata,'.')
         Plot_PLT.set_xlabel(XchoiceTK.get())
         Plot_PLT.set_ylabel(YchoiceTK.get())
         
@@ -305,6 +307,39 @@ def Button_UpdatePlotDP(canvas_PLT,Plot_PLT,Data_CL,XchoiceTK,YchoiceTK,DP_Label
     Plot_PLT.relim()
     Plot_PLT.autoscale()
     canvas_PLT.draw()
+    
+    
+def Button_UpdatePlotChi(canvas_PLT,Plot_PLT,DataCL,XchoiceTK,YchoiceTK,massSampleTK,massMolarTK,Chi_toggleTK):
+    #Plotting for Mganetometry program. Updates data for magnetic settings
+    
+    #clear given plot
+    Plot_PLT.clear()
+    
+    Xdata,Ydata=DataCL.get_axes(XchoiceTK,YchoiceTK)
+    Field=DataCL.data['Field (Oe)']
+    
+    #Transform data depending on settings
+    
+    if Chi_toggleTK.get() == 'M (emu)':
+        #no change
+        x=Xdata
+        y=Ydata
+        
+    elif Chi_toggleTK.get() == 'Mu (emu/mole)':
+        #calc new y data for Mu
+        MU=ppmv.Job_CalcMU(Xdata, Ydata, massSampleTK.get(), massMolarTK.get())
+        
+        x=Xdata
+        y=MU
+    
+    elif Chi_toggleTK.get() == 'Chi (emu/[mole Oe])':
+        Chi=ppmv.Job_CalcChi(Xdata, Field, Ydata, massSampleTK.get(), massMolarTK.get())
+        
+        x=Xdata
+        y=Chi
+        
+    
+    #Update plot with new axes and labels
     
 
 
