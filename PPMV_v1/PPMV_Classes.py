@@ -197,15 +197,8 @@ class DataPPMS():
             data=self.data_sections[-1]
             Xdata=data[self.parse_labels[-1]]
             
-            #determine average change in the data
-            Xdata_avg=np.absolute(Xdata[2:7].mean())
+            direction,x_dir=ppmv.DetermineDynamic(Xdata)
             
-            #determine if the number is really chnaging or not
-            threshold=0.02
-            if Xdata_avg<=threshold:
-                direction='Static to Dynamic'
-            else:
-                direction='Dynamic to Static'
             
             print(direction)
             self.parse_results.append(direction)

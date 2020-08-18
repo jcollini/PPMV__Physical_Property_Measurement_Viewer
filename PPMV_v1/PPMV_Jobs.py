@@ -144,10 +144,11 @@ def Split_Sets_Index_Dynamic(x_data,SplitVal,ShiftType):
     print('SplitVal is'+str(SplitVal))
     for i in range(xsize):
         #determine where data changed, depending on ShiftType
-        difference=np.absolute(x_data.iloc[i+2]-x_data.iloc[i])
+        difference=np.absolute(x_data.iloc[i+1]-x_data.iloc[i])
         
         if ShiftType=='Static to Dynamic':
-            if difference > SplitVal*1.15: #make sure you exceed static limit
+            if difference > SplitVal*5: #make sure you exceed static limit
+                print('I made a cut for a difference of '+str(difference))
                 CutIndex=i
                 break
         elif ShiftType=='Dynamic to Static':
@@ -178,7 +179,7 @@ def DetermineDirection(x_data):
 def DetermineDynamic(x_data):
    x_dir_lst=[]
    for i in range(5):
-        x_dir_lst.append(x_data.iloc[0]-x_data.iloc[i+1])
+        x_dir_lst.append(x_data.iloc[i]-x_data.iloc[i+1])
     
    x_dir=np.absolute(np.mean(x_dir_lst))
    print('Data average difference is '+str(x_dir)) 

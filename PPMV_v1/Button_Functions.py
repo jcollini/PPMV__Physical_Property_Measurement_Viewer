@@ -278,9 +278,9 @@ def Button_UpdatePlotDP(canvas_PLT,Plot_PLT,Data_CL,XchoiceTK,YchoiceTK,DP_Label
             
             #if user has a legend name, place that inside instead
             if DP_Legends_ref[i].get() != 'Insert Data Name':
-                Plot_PLT.plot(Xdata,Ydata,label=DP_Legends_ref[i].get())
+                Plot_PLT.plot(Xdata,Ydata,'.',label=DP_Legends_ref[i].get())
             else:
-                Plot_PLT.plot(Xdata,Ydata,label='Section '+str(i+1)+': '+Data_CL.parse_results[i])
+                Plot_PLT.plot(Xdata,Ydata,'.',label='Section '+str(i+1)+': '+Data_CL.parse_results[i])
             Plot_PLT.set_xlabel(Xname)
             Plot_PLT.set_ylabel(Yname)
             Plot_PLT.legend(loc='best')
