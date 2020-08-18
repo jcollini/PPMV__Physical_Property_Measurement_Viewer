@@ -282,13 +282,14 @@ def Button_UpdatePlotDP(canvas_PLT,Plot_PLT,Data_CL,XchoiceTK,YchoiceTK,DP_Label
             Plot_PLT.set_xlabel(Xname)
             Plot_PLT.set_ylabel(Yname)
             Plot_PLT.legend(loc='best')
+            
                 
             
             
     else:
         #otherwise, just plot the data as is
         data=Data_CL.data
-        print(data.columns)
+        #print(data.columns)
         
         #grab needed data
         Xdata=data[XchoiceTK.get()]

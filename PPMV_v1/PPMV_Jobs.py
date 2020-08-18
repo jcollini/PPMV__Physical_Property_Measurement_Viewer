@@ -141,16 +141,17 @@ def Split_Sets_Index_Reversed(x_data,SplitVal,Reversal):
 def Split_Sets_Index_Dynamic(x_data,SplitVal,ShiftType):
     #finds the index where a data parameter changes from static to dynamic or vice versa
     xsize=len(x_data)
+    print('SplitVal is'+str(SplitVal))
     for i in range(xsize):
         #determine where data changed, depending on ShiftType
-        difference=x_data.iloc[i+1]-x_data.iloc[i]
+        difference=np.absolute(x_data.iloc[i+2]-x_data.iloc[i])
         
         if ShiftType=='Static to Dynamic':
-            if difference > SplitVal:
+            if difference > SplitVal*1.15: #make sure you exceed static limit
                 CutIndex=i
                 break
         elif ShiftType=='Dynamic to Static':
-            if difference < SplitVal:
+            if difference < SplitVal*0.01: #the next one falls well below the usual change
                 CutIndex=i
                 break
     
@@ -175,23 +176,22 @@ def DetermineDirection(x_data):
     return direction
 
 def DetermineDynamic(x_data):
-    #determines dynamic of given data set using the average of the first few points difference
    x_dir_lst=[]
    for i in range(5):
-       x_dir_lst.append(x_data.iloc[0]-x_data.iloc[i+1])
+        x_dir_lst.append(x_data.iloc[0]-x_data.iloc[i+1])
     
-   x_dir=np.mean(x_dir_lst)
-   print('Data average difference is '+str(x_dir))
+   x_dir=np.absolute(np.mean(x_dir_lst))
+   print('Data average difference is '+str(x_dir)) 
    
-   Threshold=0.002
-   
-   if np.abs(x_dir)<Threshold:
+        
+    #determine if the number is really chnaging or not
+   threshold=0.02
+   if x_dir<=threshold:
        dynamic='Static to Dynamic'
-   
-   elif np.abs(x_dir)>Threshold:
+   else:
        dynamic='Dynamic to Static'
-
-   return dynamic    
+        
+   return dynamic,x_dir    
     
 
 

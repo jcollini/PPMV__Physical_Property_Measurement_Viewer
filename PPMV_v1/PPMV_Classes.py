@@ -109,9 +109,39 @@ class DataPPMS():
         
         
         print('data1 temp')
-        print(data1.iloc[0:5,0])
+        Xdata1=data1[label]
+        print(Xdata1[0:5])
         print('data2 temp')
-        print(data2.iloc[0:5,0])
+        Xdata2=data2[label]
+        print(Xdata2[0:5])
+        
+        #return the new data sets and index used to cut
+        return Index,data1,data2
+    
+    def method_Shift_Dynamic(self,data,label):
+        
+        #Grab column used to split
+        Xdata=data[label]
+        
+        direction,Xdata_avg=ppmv.DetermineDynamic(Xdata)
+            
+        print(direction)
+        self.parse_results.append(direction)
+        
+        #find index of split
+        Index=ppmv.Split_Sets_Index_Dynamic(Xdata, Xdata_avg, direction)
+        
+        #split the whole set and save split
+        data2=data.iloc[(Index+1):,:]
+        data1=data.iloc[0:(Index+1),:]
+        
+        
+        print('data1 temp')
+        Xdata1=data1[label]
+        print(Xdata1[0:5])
+        print('data2 temp')
+        Xdata2=data2[label]
+        print(Xdata2[0:5])
         
         #return the new data sets and index used to cut
         return Index,data1,data2
@@ -125,6 +155,7 @@ class DataPPMS():
         self.load_data()
         data=self.data #grab a copy of the original data to manipulate
         
+        
         for i in range(ParseLength):
             #pick method and parse
             if self.parse_methods[i]=='Shift_Direction':
@@ -136,8 +167,12 @@ class DataPPMS():
                 data=data2 #remaining dataset for the next cycle
             
             if self.parse_methods[i]=='Shift_Dynamic':
-                #method goes here
-                print('this method not ready yet')
+                index,data1,data2=self.method_Shift_Dynamic(data,self.parse_labels[i])
+                #now return the cut data set and index
+                #also make data2 the new data for the next turn in the loop
+                self.data_sections.append(data1)
+                self.data_indexcuts.append(index)
+                data=data2 #remaining dataset for the next cycle
         
         #after loop is done, add remaining dataset to the last dataset section
         self.data_sections.append(data)
@@ -145,8 +180,31 @@ class DataPPMS():
         #add last label depending on last result
         if self.parse_methods[-1]=='Shift_Direction':
             #determine direction of last dataset and add it to results
-            splitval=0.1
-            direction=ppmv.DetermineDirection(self.data_sections[-1])
+            data=self.data_sections[-1]
+            Xdata=data[self.parse_labels[-1]]
+            direction=ppmv.DetermineDirection(Xdata)
+            print(direction)
+            self.parse_results.append(direction)
+            
+        #add last label depending on last result
+        if self.parse_methods[-1]=='Shift_Dynamic':
+            print('shifting dynamic')
+            #determine direction of last dataset and add it to results
+            #Grab column used to split
+        
+            data=self.data_sections[-1]
+            Xdata=data[self.parse_labels[-1]]
+            
+            #determine average change in the data
+            Xdata_avg=np.absolute(Xdata[2:7].mean())
+            
+            #determine if the number is really chnaging or not
+            threshold=0.02
+            if Xdata_avg<=threshold:
+                direction='Static to Dynamic'
+            else:
+                direction='Dynamic to Static'
+            
             print(direction)
             self.parse_results.append(direction)
                 
@@ -508,6 +566,7 @@ class WidgetsPPMV():
         Divider_Legend.grid(row=row,column=3)
         
         #update lists of widgets
+        print('adding parse info')
         self.Labels_ref.append(DataLabel)
         self.Methods_ref.append(Method)
         self.DividerL_ref.append(Divider_Label)

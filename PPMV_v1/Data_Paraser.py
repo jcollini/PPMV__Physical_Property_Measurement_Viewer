@@ -67,7 +67,7 @@ def App_DataParaser(DataLoc,MachineType):
                                                                   DP.Ychoice, 
                                                                   DP.Labels_ref,
                                                                   DP.Methods_ref,
-                                                                  DP.Divider_Legends_names))
+                                                                  DP.Divider_Legend_names))
     
 ####PlotFrame
     DP.Create_PlotSettingsFrame(DP.rootApp, 2, 0)
