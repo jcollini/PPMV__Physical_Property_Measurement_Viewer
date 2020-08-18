@@ -177,7 +177,7 @@ def Button_ExportDP_CSVs(Data_CL,DP_Label_ref,DP_Method_ref,DP_Legends_ref):
             if DP_Legends_ref[i].get() != 'Insert Data Name':
                 fn=base_file_path+DP_Legends_ref[i].get()+'.csv'
             else:
-                fn=base_file_path+'Section_'+str(i+1)+'_'+Data_CL.parse_results[i]
+                fn=base_file_path+'Section_'+str(i+1)+'_'+Data_CL.parse_results[i]+'.csv'
             
             #save with final filename
             data.to_csv(fn,index=False)
@@ -198,6 +198,7 @@ def Button_UpdatePlotCW(MasterTK,canvas_PLT,Fig_PLT,Plot_PLT,DataCL,XchoiceTK,Yc
     
     #clear given plot
     Plot_PLT.clear()
+    
     
         
     Xdata,Ydata=DataCL.get_axes(XchoiceTK,YchoiceTK)
@@ -247,8 +248,9 @@ def Button_UpdatePlotDP(canvas_PLT,Plot_PLT,Data_CL,XchoiceTK,YchoiceTK,DP_Label
     #load current data
     Data_CL.load_data()
     
-    #clear current plot
+    #clear current plot and reset the parser
     Plot_PLT.clear()
+    Data_CL.reset_parse()
     
     #use dividers, if avaliable
     if DP_Label_ref:

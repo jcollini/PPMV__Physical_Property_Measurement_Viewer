@@ -85,6 +85,8 @@ class DataPPMS():
         self.parse_labels=[]
         self.parse_methods=[]
         self.parse_results=[]
+        self.data_sections=[]
+        self.parse_results=[]
         
         
     def method_Shift_Direction(self,data,label):
