@@ -147,7 +147,7 @@ def Split_Sets_Index_Dynamic(x_data,SplitVal,ShiftType):
         difference=np.absolute(x_data.iloc[i+1]-x_data.iloc[i])
         
         if ShiftType=='Static to Dynamic':
-            if difference > SplitVal*5: #make sure you exceed static limit
+            if difference > SplitVal*200: #make sure you exceed static limit
                 print('I made a cut for a difference of '+str(difference))
                 CutIndex=i
                 break

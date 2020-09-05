@@ -61,7 +61,8 @@ def App_DataParaser(DataLoc,MachineType):
     DP.Create_EmptyPlot(DP.rootApp, 2, 1, 3,2)
     #update plot
     DP.Update_Bplot.configure(command=lambda: bt.Button_UpdatePlotDP(DP.canvas, 
-                                                                  DP.Plot, 
+                                                                  DP.Plot,
+                                                                  DP.Fig,
                                                                   Data, 
                                                                   DP.Xchoice, 
                                                                   DP.Ychoice, 
@@ -74,7 +75,8 @@ def App_DataParaser(DataLoc,MachineType):
     
     #update plot
     DP.Update_Bsettings.configure(command=lambda: bt.Button_UpdatePlotDP(DP.canvas, 
-                                                                  DP.Plot, 
+                                                                  DP.Plot,
+                                                                  DP.Fig,
                                                                   Data, 
                                                                   DP.Xchoice, 
                                                                   DP.Ychoice, 

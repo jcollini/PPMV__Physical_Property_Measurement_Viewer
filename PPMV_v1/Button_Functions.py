@@ -244,7 +244,7 @@ def Button_SaveFig(Fig_PLT):
 
     
     
-def Button_UpdatePlotDP(canvas_PLT,Plot_PLT,Data_CL,XchoiceTK,YchoiceTK,DP_Label_ref,DP_Method_ref,DP_Legends_ref):
+def Button_UpdatePlotDP(canvas_PLT,Plot_PLT,Fig_PLT,Data_CL,XchoiceTK,YchoiceTK,DP_Label_ref,DP_Method_ref,DP_Legends_ref):
     #load current data
     Data_CL.load_data()
     
@@ -284,6 +284,13 @@ def Button_UpdatePlotDP(canvas_PLT,Plot_PLT,Data_CL,XchoiceTK,YchoiceTK,DP_Label
             Plot_PLT.set_xlabel(Xname)
             Plot_PLT.set_ylabel(Yname)
             Plot_PLT.legend(loc='best')
+            #Plot_PLT.relim()
+            #Plot_PLT.autoscale()
+            #Plot_PLT.ticklabel_format(axis="y", style="sci", scilimits=(0,0))
+            #Fig_PLT.ticklabel_format(axis="y", style="sci", scilimits=(0,0))
+            #plt.ticklabel_format(axis="y", style="sci", scilimits=(0,0))
+            #Fig_PLT.tight_layout()
+            #canvas_PLT.draw()
             
                 
             
@@ -300,7 +307,7 @@ def Button_UpdatePlotDP(canvas_PLT,Plot_PLT,Data_CL,XchoiceTK,YchoiceTK,DP_Label
         Ydata=data[YchoiceTK.get()]
         Yname=YchoiceTK.get()
         
-        Plot_PLT.plot(Xdata,Ydata)
+        Plot_PLT.plot(Xdata,Ydata,'.')
         Plot_PLT.set_xlabel(Xname)
         Plot_PLT.set_ylabel(Yname)
         
@@ -309,6 +316,7 @@ def Button_UpdatePlotDP(canvas_PLT,Plot_PLT,Data_CL,XchoiceTK,YchoiceTK,DP_Label
     
     Plot_PLT.relim()
     Plot_PLT.autoscale()
+    Fig_PLT.tight_layout()
     canvas_PLT.draw()
     
     
