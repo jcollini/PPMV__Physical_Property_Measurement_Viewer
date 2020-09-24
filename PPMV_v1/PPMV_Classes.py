@@ -238,6 +238,10 @@ class WidgetsPPMV():
                              "AC Drive (Oe)",
                              "AC Frequency (Hz)"]
         
+        self.optionsMarker=['.','o','v','^','s','D']
+        self.optionsColor=['k','b','r','c','m','y','w']
+                            
+        
     def Create_Root(self,title,icon):
         #controls rool application window
         self.root=tk.Tk()
@@ -608,6 +612,171 @@ class WidgetsPPMV():
         self.Divider_names.pop()
         self.Divider_Legend_names.pop()
         self.Divider_Legend_widget.pop()
+        
+    
+    def Create_MultiPlotDirections(self,MasterTK,row,column):
+        
+        #create directions text for user of multiploter
+        self.DirectionsL=tk.Label(MasterTK,text='directions for user')
+        self.DirectionsL.grid(row=0,column=0)
+        
+    def Create_MultiPlotSettingsFrame(self,MasterTK,row,column):
+        #keep track of number of datafile
+        self.DataCount=tk.IntVar()
+        self.DataCount.set(0)
+        
+        self.MultiFrame=tk.LabelFrame(MasterTK,text='Multi Plot Settings')
+        self.MultiFrame.grid(row=row,column=column)
+    
+        #create empty lists to store labels and vars lists
+        self.LoadB_ref=[]
+        self.FileL_ref=[]
+        self.MachineM_ref=[]
+        self.PlotMarkerM_ref=[]
+        self.PlotColorM_ref=[]
+        self.LegendE_ref=[]
+        
+        self.FileVar_ref=[]
+        self.MachineVar_ref=[]
+        self.MarkerVar_ref=[]
+        self.ColorVar_ref=[]
+        self.LegendVar_ref=[]
+        self.DataVar_ref=[]
+    
+        #keep track of rownumbers
+        self.RowCount=tk.IntVar()
+        self.RowCount.set(1)
+        
+        #button to create a new list
+        self.Add_Row_B=tk.Button(self.MultiFrame,text='Add Data',command=lambda: self.add_load_section(self.MultiFrame))
+        self.Add_Row_B.grid(row=0,column=0,columnspan=1)
+        
+        #buttton to remove item for list
+        self.Remove_Row_B=tk.Button(self.MultiFrame,text='Remove Data',command=lambda: self.remove_load_section(self.MultiFrame))
+        self.Remove_Row_B.grid(row=0,column=1,columnspan=2)
+        
+        #label each column with it's function
+        self.Explain1=tk.Label(self.MultiFrame,text='Loaded Data').grid(row=1,column=1)
+        self.Explain2=tk.Label(self.MultiFrame,text='Machine Type').grid(row=1,column=2)
+        self.Explain3=tk.Label(self.MultiFrame,text='Plot Marker').grid(row=1,column=3)
+        self.Explain4=tk.Label(self.MultiFrame,text='Plot Color').grid(row=1,column=4)
+        self.Explain5=tk.Label(self.MultiFrame,text='Legend Name').grid(row=1,column=5)
+    
+    def generate_load_section(self,MasterTK,start_row):
+        #creates needed load widgets for multi-plot functions
+        FileVar=tk.StringVar()
+        FileVar.set('')
+        
+        FileDisplayVar=tk.StringVar()
+        FileDisplayVar.set('.....')
+        
+        MachineVar=tk.StringVar()
+        MachineVar.set('9T-R')
+        
+        MarkerVar=tk.StringVar()
+        MarkerVar.set('.')
+        
+        ColorVar=tk.StringVar()
+        ColorVar.set('k')
+        
+        LegendVar=tk.StringVar()
+        LegendVar.set('Legend Name')
+        
+        DataVar=cl.DataPPMS(FileVar, MachineVar)
+        
+        LoadB=tk.Button(MasterTK, text='Load Data',command=lambda: bt.Button_LoadData(MasterTK, FileVar, FileDisplayVar, MachineVar, DataVar))
+        LoadDisplayL=tk.Label(MasterTK,textvariable=FileDisplayVar,bg='white')
+        LoadMachineM=tk.OptionMenu(MasterTK, MachineVar, *self.optionsMachine)
+        
+        PlotMarkerM=tk.OptionMenu(MasterTK, MarkerVar,*self.optionsMarker)
+        PlotColorM=tk.OptionMenu(MasterTK, ColorVar, *self.optionsColor)
+        
+        LegendE=tk.Entry(MasterTK,textvariable=LegendVar)
+        
+        #place onto screen
+        LoadB.grid(row=start_row,column=0)
+        LoadDisplayL.grid(row=start_row,column=1)
+        LoadMachineM.grid(row=start_row,column=2)
+        PlotMarkerM.grid(row=start_row,column=3)
+        PlotColorM.grid(row=start_row,column=4)
+        LegendE.grid(row=start_row,column=5)
+        
+        
+        #package widgets for use
+        Vars=[FileVar,MachineVar,MarkerVar,ColorVar,LegendVar,DataVar]
+        Widgets=[LoadB,LoadDisplayL,LoadMachineM,PlotMarkerM,PlotColorM,LegendE]
+        
+        return Vars,Widgets
+        
+        
+        
+    def add_load_section(self,MasterTK):
+        
+        #creates load widgets for multi-plot functions
+        dataNum=self.DataCount.get()
+        
+        #create new section of widgets and variables
+        Vars,Widgets=self.generate_load_section(MasterTK,dataNum+2)
+        
+        #update datacount
+        self.DataCount.set(dataNum+1)
+        
+        #update lists
+        self.LoadB_ref.append(Widgets[0])
+        self.FileL_ref.append(Widgets[1])
+        self.MachineM_ref.append(Widgets[2])
+        self.PlotMarkerM_ref.append(Widgets[3])
+        self.PlotColorM_ref.append(Widgets[4])
+        self.LegendE_ref.append(Widgets[5])
+        
+        self.FileVar_ref.append(Vars[0])
+        self.MachineVar_ref.append(Vars[1])
+        self.MarkerVar_ref.append(Vars[2])
+        self.ColorVar_ref.append(Vars[3])
+        self.LegendVar_ref.append(Vars[4])
+        self.DataVar_ref.append(Vars[5])
+        
+    def remove_load_section(self,MasterTK):
+        
+        #grab current data number
+        dataNum=self.DataCount.get()
+        
+        if dataNum > 0:
+            
+            #update dataNum
+            self.DataCount.set(dataNum-1)
+            
+            #remove current row from the screen
+            self.LoadB_ref[-1].grid_forget()
+            self.FileL_ref[-1].grid_forget()
+            self.MachineM_ref[-1].grid_forget()
+            self.PlotMarkerM_ref[-1].grid_forget()
+            self.PlotColorM_ref[-1].grid_forget()
+            self.LegendE_ref[-1].grid_forget()
+            
+            #remove current batch from the list
+            self.LoadB_ref.pop()
+            self.FileL_ref.pop()
+            self.MachineM_ref.pop()
+            self.PlotMarkerM_ref.pop()
+            self.PlotColorM_ref.pop()
+            self.LegendE_ref.pop()
+        
+            self.FileVar_ref.pop()
+            self.MachineVar_ref.pop()
+            self.MarkerVar_ref.pop()
+            self.ColorVar_ref.pop()
+            self.LegendVar_ref.pop()
+            self.DataVar_ref.pop()
+            
+        
+        
+        
+            
+            
+        
+        
+        
         
         
         

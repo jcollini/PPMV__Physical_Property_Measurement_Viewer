@@ -351,6 +351,58 @@ def Button_UpdatePlotChi(canvas_PLT,Plot_PLT,DataCL,XchoiceTK,YchoiceTK,massSamp
         
     
     #Update plot with new axes and labels
+        
+def Button_UpdatePlotMP(canvas_PLT,Plot_PLT,Fig_PLT,XchoiceTK,YchoiceTK,FileVar_ref,MachineVar_ref,MarkerVar_ref,ColorVar_ref,LegendVar_ref,DataVar_ref):
+    
+    #clear current plot
+    Plot_PLT.clear()
+    
+    #if data is avaliable, make plot
+    if FileVar_ref:
+        
+        #go through all given datas and plot
+        PlotNum=len(FileVar_ref)
+        for i in range(PlotNum):
+            #update user
+            print('Plotting data #'+str(i+1))
+            
+            #grab current data
+            data=DataVar_ref[i]
+            data.load_data()
+            
+            #grab needed data for plot
+            Xdata=data.data[XchoiceTK.get()]
+            Xname=XchoiceTK.get()
+        
+            Ydata=data.data[YchoiceTK.get()]
+            Yname=YchoiceTK.get()
+            
+            #grab plot parameters
+            Marker=MarkerVar_ref[i].get()
+            Color=ColorVar_ref[i].get()
+            Legend=LegendVar_ref[i].get()
+            
+            #create plot differently depending on if a label was given
+            
+            if Legend == 'Legend Name':
+                Plot_PLT.plot(Xdata,Ydata,marker=Marker,color=Color,linestyle='',label='Data #'+str(i+1))
+            else:
+                Plot_PLT.plot(Xdata,Ydata,marker=Marker,color=Color,linestyle='',label=Legend)
+                
+            
+        #redraw canvas with ticks inside
+        Plot_PLT.tick_params(direction='in')
+        
+        #plot legend
+        Plot_PLT.legend(loc='best')
+    
+        Plot_PLT.relim()
+        Plot_PLT.autoscale()
+        Fig_PLT.tight_layout()
+        canvas_PLT.draw()
+            
+            
+            
     
 
 

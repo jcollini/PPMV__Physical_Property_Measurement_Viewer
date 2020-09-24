@@ -24,6 +24,7 @@ import PPMV_Classes as cl
 import Cooling_Warming as cw
 import Data_Paraser as dp
 import Magnetometry as chi
+import Multi_Plot as mp
 """
 Designer and Programer: John Collini
 Front end design for PPMV (Physical Property Measurement Viewer)
@@ -97,8 +98,10 @@ if __name__=='__main__':
     
 
 ####Advanced Plot Frame
-    AdvPlotApp=cl.AppBox(JobsFrame, 'Advanced Plotting','Icon_empty.png', 1, 0)
-    AdvPlotApp.Create_Launcher('Application showing advanced \nplot settings for data')
+    MultiPlotApp=cl.AppBox(JobsFrame, 'Multi Plotting','Icon_empty.png', 1, 0)
+    MultiPlotApp.Create_Launcher('Application for plotting\nmultiple data sets together')
+    
+    MultiPlotApp.App_B.configure(command=lambda: mp.App_MultiPlot())
     
     
 
