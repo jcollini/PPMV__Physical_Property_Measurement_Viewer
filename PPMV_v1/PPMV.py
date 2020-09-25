@@ -98,7 +98,7 @@ if __name__=='__main__':
     
 
 ####Advanced Plot Frame
-    MultiPlotApp=cl.AppBox(JobsFrame, 'Multi Plotting','Icon_empty.png', 1, 0)
+    MultiPlotApp=cl.AppBox(JobsFrame, 'Multi Plotting','Icon_MP.png', 1, 0)
     MultiPlotApp.Create_Launcher('Application for plotting\nmultiple data sets together')
     
     MultiPlotApp.App_B.configure(command=lambda: mp.App_MultiPlot())
@@ -106,7 +106,7 @@ if __name__=='__main__':
     
 
 ####Custom PPMS File Editor 
-    CustomApp=cl.AppBox(JobsFrame, 'Parse Data','Icon_empty.png', 1, 1)
+    CustomApp=cl.AppBox(JobsFrame, 'Parse Data','Icon_DP.png', 1, 1)
     CustomApp.Create_Launcher('Application for editting \nand parsing PPMS data')
     
     CustomApp.App_B.configure(command=lambda: dp.App_DataParaser(PPMV.DataLoc.get(), PPMV.Machine.get()))
