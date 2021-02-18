@@ -388,6 +388,10 @@ def Button_UpdatePlotMP(canvas_PLT,Plot_PLT,Fig_PLT,XchoiceTK,YchoiceTK,FileVar_
                 Plot_PLT.plot(Xdata,Ydata,marker=Marker,color=Color,linestyle='',label='Data #'+str(i+1))
             else:
                 Plot_PLT.plot(Xdata,Ydata,marker=Marker,color=Color,linestyle='',label=Legend)
+        
+        #add axis labels
+        Plot_PLT.set_xlabel(Xname)
+        Plot_PLT.set_ylabel(Yname)
                 
             
         #redraw canvas with ticks inside
