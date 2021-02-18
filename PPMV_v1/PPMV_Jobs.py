@@ -40,7 +40,7 @@ def Read_PPMS_File(DAT_name,MachineType):
     #used and the bridges used
     #make sure to keep header for pandas usage
    
-    if MachineType in ['9T-ACT','14t-ACT']:
+    if MachineType in ['9T-ACT','14T-ACT']:
         headerskip=25
         #Pull coulums: [Temp (K),Field(Ore), Sample Orientation (deg angle)]
         cols=[1,3,4,5,12,13]
