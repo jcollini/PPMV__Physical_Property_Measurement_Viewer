@@ -239,7 +239,7 @@ class WidgetsPPMV():
                              "AC Frequency (Hz)"]
         
         self.optionsMarker=['.','o','v','^','s','D']
-        self.optionsColor=['k','b','r','c','m','y','w']
+        #self.optionsColor=['k','b','r','c','m','y','w']
                             
         
     def Create_Root(self,title,icon):
@@ -677,7 +677,7 @@ class WidgetsPPMV():
         MarkerVar.set('.')
         
         ColorVar=tk.StringVar()
-        ColorVar.set('k')
+        ColorVar.set('#0080ff') #blue by default
         
         LegendVar=tk.StringVar()
         LegendVar.set('Legend Name')
@@ -689,7 +689,7 @@ class WidgetsPPMV():
         LoadMachineM=tk.OptionMenu(MasterTK, MachineVar, *self.optionsMachine)
         
         PlotMarkerM=tk.OptionMenu(MasterTK, MarkerVar,*self.optionsMarker)
-        PlotColorM=tk.OptionMenu(MasterTK, ColorVar, *self.optionsColor)
+        PlotColorB=tk.Button(MasterTK, text='Color',bg=ColorVar.get(),command=lambda: bt.Button_ColorPicker(ColorVar,PlotColorB))
         
         LegendE=tk.Entry(MasterTK,textvariable=LegendVar)
         
@@ -698,13 +698,13 @@ class WidgetsPPMV():
         LoadDisplayL.grid(row=start_row,column=1)
         LoadMachineM.grid(row=start_row,column=2)
         PlotMarkerM.grid(row=start_row,column=3)
-        PlotColorM.grid(row=start_row,column=4)
+        PlotColorB.grid(row=start_row,column=4)
         LegendE.grid(row=start_row,column=5)
         
         
         #package widgets for use
         Vars=[FileVar,MachineVar,MarkerVar,ColorVar,LegendVar,DataVar]
-        Widgets=[LoadB,LoadDisplayL,LoadMachineM,PlotMarkerM,PlotColorM,LegendE]
+        Widgets=[LoadB,LoadDisplayL,LoadMachineM,PlotMarkerM,PlotColorB,LegendE]
         
         return Vars,Widgets
         

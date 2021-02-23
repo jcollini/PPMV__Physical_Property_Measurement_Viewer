@@ -12,6 +12,7 @@ from matplotlib.backends.backend_tkagg import (
     FigureCanvasTkAgg, NavigationToolbar2Tk)
 from matplotlib.backend_bases import key_press_handler
 from tkinter import filedialog
+from tkinter import colorchooser
 from scipy.optimize import curve_fit
 from random import randint
 from PIL import Image,ImageTk
@@ -419,7 +420,20 @@ various PPMV applications. These can generate matplotlib objects, tkinter object
 functions return the needed widgets and objects associated with them
 """
 
-
+def Button_ColorPicker(ColorVar,Color_Button_Widget):
+    #updates the ColorVar variable with color chosen from the tkinter color chooser
+    new_color=colorchooser.askcolor(color='#0080ff') #blue by default if none chosen
+    print(new_color)
+    
+    #grab just the hex value
+    new_color=new_color[1]
+    
+    #update color variable only if a color was selected. If not, do not update color
+    if new_color:
+        ColorVar.set(new_color)
+    
+        #update source button
+        Color_Button_Widget.configure(bg=ColorVar.get())
 
     
 def Empty_Plot(MasterTK):
