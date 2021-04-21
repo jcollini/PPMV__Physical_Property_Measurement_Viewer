@@ -618,7 +618,7 @@ class WidgetsPPMV():
         
         #create directions text for user of multiploter
         self.DirectionsL=tk.Label(MasterTK,text='directions for user')
-        self.DirectionsL.grid(row=0,column=0)
+        self.DirectionsL.grid(row=row,column=column)
         
     def Create_MultiPlotSettingsFrame(self,MasterTK,row,column):
         #keep track of number of datafile
@@ -769,9 +769,47 @@ class WidgetsPPMV():
             self.LegendVar_ref.pop()
             self.DataVar_ref.pop()
             
+    def Create_ADRDirections(self,MasterTK,row,column):
+        
+        #create directions text for user of multiploter
+        self.DirectionsL=tk.Label(MasterTK,text='directions for user')
+        self.DirectionsL.grid(row=row,column=column)
+    
+    def Create_ADRLoadFrame(self,MasterTK,row,column):
+        #creates standard loadframe use for applications
+        self.LoadFrame=tk.LabelFrame(MasterTK,text='Check/Change Loaded Data')
+        self.LoadFrame.grid(row=row,column=column,padx=10,pady=self.ExFrameY,sticky=tk.W)
+        #LoadFrame.grid_configure(ipadx=300)
+        
+        #Widgets and placement
+        #file and machine selection for data
+        self.Machine=tk.StringVar()
+        #self.Machine.set(machinetype_i)
+    
+        self.DataLoc=tk.StringVar()
+        #self.DataLoc.set(dataloc_i)
+        
+        self.DataDisplay=tk.StringVar()
+        #self.DataDisplay.set(dataloc_i[0:10]+'.......'+dataloc_i[-10:])
+        
+        #load data widgets
+        self.Load_B=tk.Button(self.LoadFrame,text="Load data")
+        
+        self.Load_B.grid(row=0,column=0)
+        
+        self.Loadcheck_L=tk.Label(self.LoadFrame,text='File:')
+        self.Loadcheck_L.grid(row=0,column=1)
+        
+        self.Loadcheck_E=tk.Label(self.LoadFrame,textvariable=self.DataDisplay,bg='white')
+        self.Loadcheck_E.grid(row=0,column=2)
         
         
+        self.Loadmachine_L=tk.Label(self.LoadFrame,text='Machine and Puck Used:')
+        self.Loadmachine_L.grid(row=0,column=3)
         
+       
+        self.Loadmachine_D=tk.OptionMenu(self.LoadFrame, self.Machine, *self.optionsMachine)
+        self.Loadmachine_D.grid(row=0,column=4)
             
             
         

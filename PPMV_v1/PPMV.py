@@ -25,6 +25,7 @@ import Cooling_Warming as cw
 import Data_Paraser as dp
 import Magnetometry as chi
 import Multi_Plot as mp
+import ADR_Process as adr
 """
 Designer and Programer: John Collini
 Front end design for PPMV (Physical Property Measurement Viewer)
@@ -117,6 +118,13 @@ if __name__=='__main__':
     
     #Simple File Output button
     ChiApp.App_B.configure(command=lambda: chi.App_Magnetometry(PPMV.DataLoc.get(), PPMV.Machine.get()))
+    
+####ADR Frame
+    ADRApp=cl.AppBox(JobsFrame, 'ADR Processing','Icon_Chi.png', 1, 3)
+    ADRApp.Create_Launcher('Process ADR datafiles\n')
+    
+    #Simple File Output button
+    ADRApp.App_B.configure(command=lambda: adr.App_ADRProcess())
     
        
     

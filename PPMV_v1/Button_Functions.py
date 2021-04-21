@@ -378,6 +378,9 @@ def Button_UpdatePlotMP(canvas_PLT,Plot_PLT,Fig_PLT,XchoiceTK,YchoiceTK,FileVar_
             Ydata=data.data[YchoiceTK.get()]
             Yname=YchoiceTK.get()
             
+            #Filter data
+            Xdata=Xdata.replace({0.0:np.nan})
+            Ydata=Ydata.replace({0.0:np.nan})
             #grab plot parameters
             Marker=MarkerVar_ref[i].get()
             Color=ColorVar_ref[i].get()
@@ -386,9 +389,9 @@ def Button_UpdatePlotMP(canvas_PLT,Plot_PLT,Fig_PLT,XchoiceTK,YchoiceTK,FileVar_
             #create plot differently depending on if a label was given
             
             if Legend == 'Legend Name':
-                Plot_PLT.plot(Xdata,Ydata,marker=Marker,color=Color,linestyle='',label='Data #'+str(i+1))
+                Plot_PLT.plot(Xdata,Ydata,marker=Marker,color=Color,linestyle='solid',label='Data #'+str(i+1))
             else:
-                Plot_PLT.plot(Xdata,Ydata,marker=Marker,color=Color,linestyle='',label=Legend)
+                Plot_PLT.plot(Xdata,Ydata,marker=Marker,color=Color,linestyle='solid',label=Legend)
         
         #add axis labels
         Plot_PLT.set_xlabel(Xname)
