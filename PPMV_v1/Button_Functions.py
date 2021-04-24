@@ -228,6 +228,7 @@ def Button_UpdatePlotCW(MasterTK,canvas_PLT,Fig_PLT,Plot_PLT,DataCL,XchoiceTK,Yc
     Plot_PLT.autoscale()
     Fig_PLT.tight_layout()
     canvas_PLT.draw()
+
         
     
     
@@ -321,37 +322,56 @@ def Button_UpdatePlotDP(canvas_PLT,Plot_PLT,Fig_PLT,Data_CL,XchoiceTK,YchoiceTK,
     canvas_PLT.draw()
     
     
-def Button_UpdatePlotChi(canvas_PLT,Plot_PLT,DataCL,XchoiceTK,YchoiceTK,massSampleTK,massMolarTK,Chi_toggleTK):
+def Button_UpdatePlotChi(canvas_PLT,Plot_PLT,Fig_PLT,DataCL,XchoiceTK,YchoiceTK,massSampleTK,massMolarTK,Chi_toggleTK):
     #Plotting for Mganetometry program. Updates data for magnetic settings
     
     #clear given plot
     Plot_PLT.clear()
     
     Xdata,Ydata=DataCL.get_axes(XchoiceTK,YchoiceTK)
-    Field=DataCL.data['Field (Oe)']
+    Field=DataCL.data['Magnetic Field (Oe)']
     
     #Transform data depending on settings
+    
+    print(Chi_toggleTK.get()+' is the setting')
     
     if Chi_toggleTK.get() == 'M (emu)':
         #no change
         x=Xdata
         y=Ydata
+        yname=YchoiceTK.get()
         
     elif Chi_toggleTK.get() == 'Mu (emu/mole)':
         #calc new y data for Mu
-        MU=ppmv.Job_CalcMU(Xdata, Ydata, massSampleTK.get(), massMolarTK.get())
+        MU=ppmv.Job_CalcMU(Ydata, massSampleTK.get(), massMolarTK.get())
         
         x=Xdata
         y=MU
+        yname=Chi_toggleTK.get()
     
     elif Chi_toggleTK.get() == 'Chi (emu/[mole Oe])':
-        Chi=ppmv.Job_CalcChi(Xdata, Field, Ydata, massSampleTK.get(), massMolarTK.get())
+        Chi=ppmv.Job_CalcChi(Field, Ydata, massSampleTK.get(), massMolarTK.get())
         
         x=Xdata
         y=Chi
+        yname=Chi_toggleTK.get()
+    
+    xname=XchoiceTK.get()
         
     
     #Update plot with new axes and labels
+    
+    Plot_PLT.plot(x,y,marker='.',color='black')
+    Plot_PLT.set_xlabel(xname)
+    Plot_PLT.set_ylabel(yname)    
+    
+    #redraw canvas with ticks inside
+    Plot_PLT.tick_params(direction='in')
+    
+    Plot_PLT.relim()
+    Plot_PLT.autoscale()
+    Fig_PLT.tight_layout()
+    canvas_PLT.draw()
         
 def Button_UpdatePlotMP(canvas_PLT,Plot_PLT,Fig_PLT,XchoiceTK,YchoiceTK,FileVar_ref,MachineVar_ref,MarkerVar_ref,ColorVar_ref,LegendVar_ref,DataVar_ref):
     
@@ -409,7 +429,48 @@ def Button_UpdatePlotMP(canvas_PLT,Plot_PLT,Fig_PLT,XchoiceTK,YchoiceTK,FileVar_
         Fig_PLT.tight_layout()
         canvas_PLT.draw()
             
-            
+
+def Button_ExportChi_CSVs(MasterTK,DataCL,XchoiceTK,YchoiceTK,massSampleTK,massMolarTK,Chi_toggleTK):
+    
+    
+    #Grab wanted axis anmes and data, convert to numpy
+    Xdata,Ydata=DataCL.get_axes(XchoiceTK,YchoiceTK)
+    Field=DataCL.data['Magnetic Field (Oe)']
+    
+    #Transform data depending on settings
+    
+    print(Chi_toggleTK.get()+' is the setting')
+    
+    if Chi_toggleTK.get() == 'M (emu)':
+        #no change
+        x=Xdata
+        y=Ydata
+        
+    elif Chi_toggleTK.get() == 'Mu (emu/mole)':
+        #calc new y data for Mu
+        MU=ppmv.Job_CalcMU(Ydata, massSampleTK.get(), massMolarTK.get())
+        
+        x=Xdata
+        y=MU
+        y.name=(Chi_toggleTK.get())
+    
+    elif Chi_toggleTK.get() == 'Chi (emu/[mole Oe])':
+        Chi=ppmv.Job_CalcChi(Field, Ydata, massSampleTK.get(), massMolarTK.get())
+        
+        x=Xdata
+        y=Chi
+        y.name=(Chi_toggleTK.get())
+        
+    
+    #create dataset to export
+    data_out=pd.concat([x,y],axis=1)
+        
+    
+    #export data
+    #Grab the file location and name from the user
+    export_file_path = filedialog.asksaveasfilename(defaultextension='.csv',filetypes=(('csv','*.csv'),('all files','*.*')))
+    
+    data_out.to_csv(export_file_path,index=False)
             
     
 

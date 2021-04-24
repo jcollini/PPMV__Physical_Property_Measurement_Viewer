@@ -50,15 +50,41 @@ def App_Magnetometry(dataloc,machinetype):
     
 ####Plotting
     CW.Create_EmptyPlot(CW.rootApp,2,1,1,2)
+    CW.Update_Bplot.configure(command=lambda: bt.Button_UpdatePlotChi(CW.canvas,
+                                                                     CW.Plot,
+                                                                     CW.Fig,
+                                                                     Data,
+                                                                     CW.Xchoice,
+                                                                     CW.Ychoice,
+                                                                     CW.MassSample,
+                                                                     CW.MolarSample,
+                                                                     CW.Chi_Toggle))
     
     
 ####Save/Export frame
     CW.Create_ExportFrame(CW.rootApp,1,1)
     CW.SaveFig_B.configure(command=lambda: bt.Button_SaveFig(CW.Fig))
     
+    CW.Export_B.configure(command=lambda: bt.Button_ExportChi_CSVs(CW.rootApp, 
+                                                                   Data, 
+                                                                   CW.Xchoice, 
+                                                                   CW.Ychoice, 
+                                                                   CW.MassSample, 
+                                                                   CW.MolarSample, 
+                                                                   CW.Chi_Toggle))
+    
 
 ####Settings Frame
     CW.Create_ChiSettingsFrame(CW.rootApp, 2, 0)
+    CW.Update_Bset.configure(command=lambda: bt.Button_UpdatePlotChi(CW.canvas,
+                                                                     CW.Plot,
+                                                                     CW.Fig,
+                                                                     Data,
+                                                                     CW.Xchoice,
+                                                                     CW.Ychoice,
+                                                                     CW.MassSample,
+                                                                     CW.MolarSample,
+                                                                     CW.Chi_Toggle))
     
     
 

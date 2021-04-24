@@ -413,10 +413,10 @@ class WidgetsPPMV():
         self.RadioM=tk.Radiobutton(self.SetFrame,text='M (emu)',variable=self.Chi_Toggle, value='M (emu)')
         self.RadioM.grid(row=1,column=0)
         
-        self.RadioMu=tk.Radiobutton(self.SetFrame,text='Mu (emu/mole)',variable=self.Chi_Toggle, value='M (emu/mole)')
+        self.RadioMu=tk.Radiobutton(self.SetFrame,text='Mu (emu/mole)',variable=self.Chi_Toggle, value='Mu (emu/mole)')
         self.RadioMu.grid(row=1,column=1)
         
-        self.RadioChi=tk.Radiobutton(self.SetFrame,text='Chi (emu/[mole Oe])',variable=self.Chi_Toggle, value='M (emu/[mole Oe])')
+        self.RadioChi=tk.Radiobutton(self.SetFrame,text='Chi (emu/[mole Oe])',variable=self.Chi_Toggle, value='Chi (emu/[mole Oe])')
         self.RadioChi.grid(row=1,column=2)
         
         #Mass entry
