@@ -45,13 +45,19 @@ def App_ADRProcess():
     ####Header widget
     ADR.Create_Header(ADR.rootApp, 'PPMV ADR Processing', 0, 0)
     
-    ####Directions widget
-    ADR.Create_ADRDirections(ADR.rootApp, 1, 0)
     
     ####Empty Plot widget
-    ADR.Create_EmptyPlot(ADR.rootApp, 2, 1, 2, 2)
+    ADR.Create_ADREmptyPlot(ADR.rootApp, 2, 0, 1, 3)
+    ADR.Create_ADREmptyPlot2(ADR.rootApp, 2, 3, 1, 3)
     
     ####Load Data frame
-    ADR.Create_ADRLoadFrame(ADR.rootApp, 2, 0)
+    ADR.Create_ADRLoadFrame(ADR.rootApp, 1, 0)
+    
+    ####Settings Frames
+    ADR.Create_ADR1SampleFrame(ADR.rootApp, 4, 0)
+    ADR.Create_ADR2SampleFrame(ADR.rootApp, 4, 4)
+    
+    ####Export Frame
+    ADR.Create_ExportFrame(ADR.rootApp, 1, 3)
     
    

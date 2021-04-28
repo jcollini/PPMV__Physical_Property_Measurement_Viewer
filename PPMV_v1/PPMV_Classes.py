@@ -240,6 +240,8 @@ class WidgetsPPMV():
         
         self.optionsMarker=['.','o','v','^','s','D']
         #self.optionsColor=['k','b','r','c','m','y','w']
+        
+        self.ADR_Xoptions=['PPMS Temperature (K)','ADR Temperature (K)','ADR Resistance Ch.3 (Ohms)']
                             
         
     def Create_Root(self,title,icon):
@@ -338,7 +340,35 @@ class WidgetsPPMV():
         self.toolbarFrame.grid(row=row+rowspan_plot,column=column,columnspan=columnspan_plot)
         self.toolbar = NavigationToolbar2Tk(self.canvas, self.toolbarFrame)
         self.Update_Bplot=tk.Button(MasterTK,text='Update Plot')
-        self.Update_Bplot.grid(row=row+rowspan_plot,column=2,sticky=tk.E)
+        Update_Loc=column+1
+        self.Update_Bplot.grid(row=row+rowspan_plot,column=Update_Loc,sticky=tk.E)
+    
+    def Create_ADREmptyPlot(self,MasterTK,row,column,rowspan_plot,columnspan_plot):
+        #create plot and put on screen. Have it empty to start
+        self.canvas,self.Fig,self.Plot,self.toolbarFrame=bt.Empty_Plot(MasterTK)
+        #set plot to screen
+        self.canvas.get_tk_widget().grid(row=row,column=column,rowspan=rowspan_plot,columnspan=columnspan_plot)
+    
+        
+        self.toolbarFrame.grid(row=row+rowspan_plot,column=column,columnspan=columnspan_plot)
+        self.toolbar = NavigationToolbar2Tk(self.canvas, self.toolbarFrame)
+        
+        #add title to make plot clearer
+        self.Plot.set_title('ADR Sample Bridge 1')
+    
+    def Create_ADREmptyPlot2(self,MasterTK,row,column,rowspan_plot,columnspan_plot):
+        #create a second plot and put on screen. Have it empty to start
+        self.canvas2,self.Fig2,self.Plot2,self.toolbarFrame2=bt.Empty_Plot(MasterTK)
+        #set plot to screen
+        self.canvas2.get_tk_widget().grid(row=row,column=column,rowspan=rowspan_plot,columnspan=columnspan_plot)
+    
+        
+        self.toolbarFrame2.grid(row=row+rowspan_plot,column=column,columnspan=columnspan_plot)
+        self.toolbar2 = NavigationToolbar2Tk(self.canvas2, self.toolbarFrame2)
+        
+        
+        #add title to make plot clearer
+        self.Plot2.set_title('ADR Sample Bridge 2')
     
     def Create_ExportFrame(self,MasterTK,row,column):
         self.ExportFrame=tk.LabelFrame(MasterTK,text='Save/Export')
@@ -519,6 +549,49 @@ class WidgetsPPMV():
         self.Remove_Row_B=tk.Button(self.ParseFrame,text='Remove Divider')
         self.Remove_Row_B.grid(row=1,column=1,columnspan=2)
         
+
+    def Create_ADR1SampleFrame(self,MasterTK,row,column):
+        #create frame
+        self.ADR1Frame=tk.LabelFrame(MasterTK,text='Sample 1 settings')
+        self.ADR1Frame.grid(row=row,column=column)
+        
+        #create variables
+        self.X1=tk.StringVar() #name of x-axis for ADR
+        self.X1.set('PPMS Temperature (K)')
+        
+        #Create x-axis setting (the toggle)
+        self.X1_L=tk.Label(self.ADR1Frame,text='x axis:')
+        self.X1_L.grid(row=0,column=0)
+        
+        self.X1_D=tk.OptionMenu(self.ADR1Frame, self.X1, *self.ADR_Xoptions)
+        self.X1_D.grid(row=0,column=1)
+        
+        #create update button
+        self.Update1_B=tk.Button(self.ADR1Frame,text='Update')
+        self.Update1_B.grid(row=1,column=0)
+        
+    def Create_ADR2SampleFrame(self,MasterTK,row,column):
+        #create frame
+        self.ADR2Frame=tk.LabelFrame(MasterTK,text='Sample 2 settings')
+        self.ADR2Frame.grid(row=row,column=column)
+        
+        #create variables
+        self.X2=tk.StringVar() #name of x-axis for ADR
+        self.X2.set('PPMS Temperature (K)')
+        
+        #Create x-axis setting (the toggle)
+        self.X2_L=tk.Label(self.ADR2Frame,text='x axis:')
+        self.X2_L.grid(row=0,column=0)
+        
+        self.X2_D=tk.OptionMenu(self.ADR2Frame, self.X1, *self.ADR_Xoptions)
+        self.X2_D.grid(row=0,column=1)
+        
+        #create update button
+        self.Update2_B=tk.Button(self.ADR2Frame,text='Update')
+        self.Update2_B.grid(row=1,column=0)
+        
+            
+        
     def generate_parse_section(self,MasterTK,labeltext):
         #creates parse widgets
         
@@ -661,7 +734,9 @@ class WidgetsPPMV():
         self.Explain3=tk.Label(self.MultiFrame,text='Plot Marker').grid(row=1,column=3)
         self.Explain4=tk.Label(self.MultiFrame,text='Plot Color').grid(row=1,column=4)
         self.Explain5=tk.Label(self.MultiFrame,text='Legend Name').grid(row=1,column=5)
-    
+        
+        
+        
     def generate_load_section(self,MasterTK,start_row):
         #creates needed load widgets for multi-plot functions
         FileVar=tk.StringVar()
@@ -769,28 +844,22 @@ class WidgetsPPMV():
             self.LegendVar_ref.pop()
             self.DataVar_ref.pop()
             
-    def Create_ADRDirections(self,MasterTK,row,column):
-        
-        #create directions text for user of multiploter
-        self.DirectionsL=tk.Label(MasterTK,text='directions for user')
-        self.DirectionsL.grid(row=row,column=column)
     
     def Create_ADRLoadFrame(self,MasterTK,row,column):
         #creates standard loadframe use for applications
-        self.LoadFrame=tk.LabelFrame(MasterTK,text='Check/Change Loaded Data')
+        self.LoadFrame=tk.LabelFrame(MasterTK,text='Load ADR Data')
         self.LoadFrame.grid(row=row,column=column,padx=10,pady=self.ExFrameY,sticky=tk.W)
         #LoadFrame.grid_configure(ipadx=300)
         
         #Widgets and placement
         #file and machine selection for data
         self.Machine=tk.StringVar()
-        #self.Machine.set(machinetype_i)
+        self.Machine.set('14T-ADR')
     
         self.DataLoc=tk.StringVar()
-        #self.DataLoc.set(dataloc_i)
         
         self.DataDisplay=tk.StringVar()
-        #self.DataDisplay.set(dataloc_i[0:10]+'.......'+dataloc_i[-10:])
+        self.DataDisplay.set('      No Data Loaded      ')
         
         #load data widgets
         self.Load_B=tk.Button(self.LoadFrame,text="Load data")
