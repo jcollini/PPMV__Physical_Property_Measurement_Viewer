@@ -557,7 +557,7 @@ class WidgetsPPMV():
         
         #create variables
         self.X1=tk.StringVar() #name of x-axis for ADR
-        self.X1.set('PPMS Temperature (K)')
+        self.X1.set('ADR Temperature (K)')
         
         #Create x-axis setting (the toggle)
         self.X1_L=tk.Label(self.ADR1Frame,text='x axis:')
@@ -577,7 +577,7 @@ class WidgetsPPMV():
         
         #create variables
         self.X2=tk.StringVar() #name of x-axis for ADR
-        self.X2.set('PPMS Temperature (K)')
+        self.X2.set('ADR Temperature (K)')
         
         #Create x-axis setting (the toggle)
         self.X2_L=tk.Label(self.ADR2Frame,text='x axis:')
@@ -854,7 +854,7 @@ class WidgetsPPMV():
         #Widgets and placement
         #file and machine selection for data
         self.Machine=tk.StringVar()
-        self.Machine.set('14T-ADR')
+        self.Machine.set('9T-R')
     
         self.DataLoc=tk.StringVar()
         

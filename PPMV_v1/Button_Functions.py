@@ -471,6 +471,89 @@ def Button_ExportChi_CSVs(MasterTK,DataCL,XchoiceTK,YchoiceTK,massSampleTK,massM
     export_file_path = filedialog.asksaveasfilename(defaultextension='.csv',filetypes=(('csv','*.csv'),('all files','*.*')))
     
     data_out.to_csv(export_file_path,index=False)
+    
+
+def Button_UpdateADRPlot(DataCL,BridgeNum,canvas_PLT,Plot_PLT,Fig_PLT,XchoiceTK):
+    
+    #clear plot
+    Plot_PLT.clear()
+    
+    #load current data
+    DataCL.load_data()
+    
+    #read data for given sample number and xchoice
+    if BridgeNum==1:
+        yname='Bridge 1 Resistance (Ohms)'
+        ydata=DataCL.data[yname]
+    elif BridgeNum==2:
+        yname='Bridge 2 Resistance (Ohms)'
+        ydata=DataCL.data[yname]
+    
+    #read xdata, convert if needed
+    xname=XchoiceTK.get()
+    xoptions=['PPMS Temperature (K)','ADR Temperature (K)','ADR Resistance Ch.3 (Ohms)']
+    
+    if xname==xoptions[0]:
+        xdata=DataCL.data['Temperature (K)']
+    elif xname==xoptions[1]:
+        #grab ADR data
+        ADR_Rho=DataCL.data['Bridge 3 Resistance (Ohms)']
+        #convert ADR Rho to ADR Temp
+        ADR_Temp=ppmv.ADR_rho2temp(ADR_Rho)
+        xdata=ADR_Temp
+    elif xname == xoptions[2]:
+        xdata=DataCL.data['Bridge 3 Resistance (Ohms)']
+        
+    
+    #plot data
+    Plot_PLT.plot(xdata,ydata,marker='.',color='black')
+    Plot_PLT.set_xlabel(xname)
+    Plot_PLT.set_ylabel(yname)    
+    
+    #redraw canvas with ticks inside
+    Plot_PLT.tick_params(direction='in')
+    
+    Plot_PLT.relim()
+    Plot_PLT.autoscale()
+    Fig_PLT.tight_layout()
+    canvas_PLT.draw()
+        
+        
+    
+def Button_SaveFigADR(Fig_PLT1,Fig_PLT2):
+    
+    
+    #Grab the file location and name from the user
+    export_file_path = filedialog.asksaveasfilename(filetypes=(('Enter one name',''),('Enter one name','')))
+                                    
+    Fig_PLT1.savefig(export_file_path+'_Bridge1.png')
+    Fig_PLT2.savefig(export_file_path+'_Bridge2.png')
+    
+
+def Button_ExportADR_CSVs(DataCL):
+    
+    #load current data
+    DataCL.load_data()
+    
+    #grab needed data columns
+    Sample1_R=DataCL.data['Bridge 1 Resistance (Ohms)']
+    Sample2_R=DataCL.data['Bridge 2 Resistance (Ohms)']
+    ADR_R=DataCL.data['Bridge 3 Resistance (Ohms)']
+    PPMS_Temp=DataCL.data['Temperature (K)']
+    PPMS_Temp.name='PPMS Temperature (K)'
+    
+    #convert ADR_R to ADR_Temp
+    ADR_Temp=ppmv.ADR_rho2temp(ADR_R)
+    
+    
+    #combine into new dataframe
+    dataOut=pd.concat([ADR_Temp,PPMS_Temp,Sample1_R,Sample2_R],axis=1)
+    
+    #grab location, save CSV
+    export_file_path = filedialog.asksaveasfilename(defaultextension='.csv',filetypes=(('csv','*.csv'),('all files','*.*')))
+                                    
+    dataOut.to_csv (export_file_path, index = False, header=True)
+    
             
     
 

@@ -53,11 +53,39 @@ def App_ADRProcess():
     ####Load Data frame
     ADR.Create_ADRLoadFrame(ADR.rootApp, 1, 0)
     
+    ADR.Load_B.configure(command=lambda: bt.Button_LoadData(ADR.rootApp, 
+                                                           ADR.DataLoc, 
+                                                           ADR.DataDisplay, 
+                                                           ADR.Machine, 
+                                                           Data))
+    
     ####Settings Frames
     ADR.Create_ADR1SampleFrame(ADR.rootApp, 4, 0)
     ADR.Create_ADR2SampleFrame(ADR.rootApp, 4, 4)
     
+    ADR.Update1_B.configure(command=lambda: bt.Button_UpdateADRPlot(Data, 
+                                                                    1, 
+                                                                    ADR.canvas, 
+                                                                    ADR.Plot, 
+                                                                    ADR.Fig, 
+                                                                    ADR.X1))
+    
+    ADR.Update2_B.configure(command=lambda: bt.Button_UpdateADRPlot(Data, 
+                                                                    2, 
+                                                                    ADR.canvas2, 
+                                                                    ADR.Plot2, 
+                                                                    ADR.Fig2, 
+                                                                    ADR.X2))
     ####Export Frame
     ADR.Create_ExportFrame(ADR.rootApp, 1, 3)
+    
+    ADR.SaveFig_B.configure(command=lambda: bt.Button_SaveFigADR(ADR.Fig,
+                                                                 ADR.Fig2))
+    
+    ADR.Export_B.config(command=lambda: bt.Button_ExportADR_CSVs(Data))
+    
+    
+    ####Data Object for window
+    Data=cl.DataPPMS(ADR.DataLoc,ADR.Machine)
     
    

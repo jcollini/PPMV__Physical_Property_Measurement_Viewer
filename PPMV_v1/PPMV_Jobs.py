@@ -282,3 +282,25 @@ def Job_CalcChi(Field,M,massSample,massMolar):
         print('ERROR: Molar Mass of Sample is 0')
         
     return Chi
+
+def ADR_rho2temp(ADR_Rho):
+    #convert ADR resistance (ohms) to temperature (k) by using interpolated lookup file
+    temp_list=[]
+    ADR_lookup=pd.read_csv('ADRCalibration-interpolate.csv')
+    ADR_lookupR=ADR_lookup['Interpolated R']
+    ADR_lookupT=ADR_lookup['Interpolated T']
+    
+    for Rho in ADR_Rho:
+        #find temp that's closest to user Rho value. 
+        index=ADR_lookupR.sub(Rho).abs().idxmin()
+        temp=ADR_lookupT.iloc[index]
+        temp_list.append(temp)
+        #print(temp)
+    
+    #add look up temps to output Series
+    
+    ADR_Temp = pd.Series(temp_list,name='ADR Temperature (K)')
+    
+    return ADR_Temp
+            
+            
