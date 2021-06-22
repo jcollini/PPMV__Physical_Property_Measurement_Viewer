@@ -120,7 +120,7 @@ if __name__=='__main__':
     ChiApp.App_B.configure(command=lambda: chi.App_Magnetometry(PPMV.DataLoc.get(), PPMV.Machine.get()))
     
 ####ADR Frame
-    ADRApp=cl.AppBox(JobsFrame, 'ADR Processing','Icon_Empty.png', 1, 3)
+    ADRApp=cl.AppBox(JobsFrame, 'ADR Processing','Icon_ADR.png', 1, 3)
     ADRApp.Create_Launcher('Process ADR datafiles\n')
     
     #Simple File Output button
