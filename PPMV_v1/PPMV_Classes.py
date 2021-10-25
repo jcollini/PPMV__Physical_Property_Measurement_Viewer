@@ -57,7 +57,7 @@ class DataPPMS():
     
     def load_data(self):
         #Load only needed data. This overwrites current data
-        self.data=ppmv.Read_PPMS_File(self.filenameTK.get(), self.machineTK.get())
+        self.data=ppmv.Read_PPMV_File(self.filenameTK.get())
         
     def get_axes(self,Xchoice,Ychoice):
         #returns a selected x and y choice

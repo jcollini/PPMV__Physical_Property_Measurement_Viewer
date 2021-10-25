@@ -35,6 +35,31 @@ import Magnetometry as chi
 #basic plotting, fitting, and calculation. These functions are combined to form
 #the user friendly "Jobs" functions
 
+def Read_PPMV_File(File_name):
+    #upgrade to the old Read_PPMS_File. Sould no longer need to know what machine you are using
+    
+    #find file info needed to read file
+    headerskip,MachineType,cols=Job_FindFileInfo(File_name)
+    
+    #Now load in the file and return as a Pandas data frame. 
+    data=pd.read_csv(File_name,skiprows=headerskip,usecols=cols)
+    
+    if MachineType == 'ACT':
+        cols=['Time Stamp (sec)',
+              'Temperature (K)',
+              'Magnetic Field (Oe)',
+              'Sample Position (deg)',
+              'Bridge 1 Resistance (Ohms)',
+              'Bridge 2 Resistance (Ohms)']
+        
+    data.columns=cols
+   
+   #fill all NaNs with zeros
+    data.fillna(0, inplace=True)
+    
+    return data
+    
+
 def Read_PPMS_File(DAT_name,MachineType):
     #Function reads in file and returns needed parameters based on the machine
     #used and the bridges used
@@ -303,4 +328,78 @@ def ADR_rho2temp(ADR_Rho):
     
     return ADR_Temp
             
+
+def Job_FindRowSkip(SearchFile,String):
+    #find specific header line to read in PPMS and PPMV files cleanly
+    row_number=0
+    found_row=0
+    
+    with open(SearchFile,'r') as File:
+        for row in File:
+            if String in row:
+                print(row_number)
+                found_row=row_number
             
+            row_number+=1
+                
+    return found_row
+
+def Job_FindMachineType(File_name,File_rowskip):
+    #determine file type by the rowskip needed
+    if File_rowskip==25:
+        MachineType='ACT'
+        #Pull coulums: [Temp (K),Field(Ore), Sample Orientation (deg angle)]
+        cols=[1,3,4,5,12,13]
+    elif File_rowskip==31: 
+        MachineType='R'
+        cols=['Time Stamp (sec)',
+              'Temperature (K)',
+              'Magnetic Field (Oe)',
+              'Sample Position (deg)',
+              'Bridge 1 Resistance (Ohms)',
+              'Bridge 2 Resistance (Ohms)',
+              'Bridge 3 Resistance (Ohms)',]
+    elif File_rowskip==30:
+        MachineType='Dynacool'
+        cols=['Time Stamp (sec)',
+              'Temperature (K)',
+              'Magnetic Field (Oe)',
+              'Sample Position (deg)',
+              'Bridge 1 Resistance (Ohms)',
+              'Bridge 2 Resistance (Ohms)',
+              'Bridge 3 Resistance (Ohms)',]
+    elif File_rowskip==40:
+        MachineType='MPMS3'
+        cols=["Time Stamp (sec)",
+              "Temperature (K)",
+              "Magnetic Field (Oe)",
+              "Moment (emu)",
+              "AC Moment (emu)",
+              "AC Phase (deg)",
+              "AC Susceptibility (emu/Oe)",
+              "AC X' (emu/Oe)",
+              "AC X'' (emu/Oe)",
+              "AC Drive (Oe)",
+              "AC Frequency (Hz)",
+              "DC Moment Fixed Ctr (emu)",
+              "DC Moment Free Ctr (emu)"]
+    elif File_rowskip==0:
+        #file made by PPMV programs
+        dataTemp=pd.read_csv(File_name)
+        MachineType='PPMV'
+        cols=dataTemp.columns
+    else:
+        NameError('Please specify MachineType as 9T, 14T, or Dynacool or _ACT varient')
+    
+    return MachineType,cols
+            
+
+def Job_FindFileInfo(File_name):
+    #find file headerskip,type, and col names needed
+    #determine row number of header
+    headerskip=Job_FindRowSkip(File_name, 'Time Stamp (sec)')
+    
+    #determine file type and columns to use
+    MachineType,cols=Job_FindMachineType(File_name,headerskip)
+    
+    return headerskip,MachineType,cols
