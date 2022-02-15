@@ -1,7 +1,7 @@
 # PPMV__Physical_Property_Measurement_Viewer
 Python GUI tool for quickly accessing and quickly analyzing data from Physical Property Measurement Systems. [in development]
 
-![Alt text](https://github.com/jcollini/PPMV__Physical_Property_Measurement_Viewer/Development/Progress_Pictures/GitHub_HomePage.jpg?raw=true "Optional Title")
+[![Git-Hub-Home-Page.jpg](https://i.postimg.cc/3x1n7GtM/Git-Hub-Home-Page.jpg)](https://postimg.cc/NKy1kKhb)
 
 Author: John Collini
 
