@@ -46,7 +46,7 @@ def App_MultiPlot():
     MP.Create_Header(MP.rootApp, 'PPMV Multi-Plot', 0, 0)
     
     ####Directions widget
-    MP.Create_MultiPlotDirections(MP.rootApp, 1, 0)
+    #MP.Create_MultiPlotDirections(MP.rootApp, 1, 0)
     
     ####Empty Plot widget
     MP.Create_EmptyPlot(MP.rootApp, 2, 1, 2, 2)
@@ -79,5 +79,8 @@ def App_MultiPlot():
                                                                   MP.ColorVar_ref,
                                                                   MP.LegendVar_ref,
                                                                   MP.DataVar_ref)) 
+    
+    ####Data Settings Frame
+    MP.Create_MultiPlotDataSettingsFrame(MP.rootApp, 4, 0)
     
     

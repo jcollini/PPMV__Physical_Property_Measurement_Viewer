@@ -289,10 +289,12 @@ class WidgetsPPMV():
     
     
         self.Loadmachine_L=tk.Label(self.LoadFrame,text='Machine and Puck Used:')
-        self.Loadmachine_L.grid(row=0,column=3,padx=(20,0))
+        #self.Loadmachine_L.grid(row=0,column=3,padx=(20,0))
+        
+    
     
         self.Loadmachine_D=tk.OptionMenu(self.LoadFrame, self.Machine, *self.optionsMachine)
-        self.Loadmachine_D.grid(row=0,column=4)
+        #self.Loadmachine_D.grid(row=0,column=4)
     
     def Create_LoadFrame(self,MasterTK,dataloc_i,machinetype_i,row,column):
         #creates standard loadframe use for applications
@@ -324,11 +326,11 @@ class WidgetsPPMV():
         
         
         self.Loadmachine_L=tk.Label(self.LoadFrame,text='Machine and Puck Used:')
-        self.Loadmachine_L.grid(row=0,column=3)
+        #self.Loadmachine_L.grid(row=0,column=3)
         
        
         self.Loadmachine_D=tk.OptionMenu(self.LoadFrame, self.Machine, *self.optionsMachine)
-        self.Loadmachine_D.grid(row=0,column=4)
+        #self.Loadmachine_D.grid(row=0,column=4)
         
     def Create_EmptyPlot(self,MasterTK,row,column,rowspan_plot,columnspan_plot):
         #create plot and put on screen. Have it empty to start
@@ -734,6 +736,42 @@ class WidgetsPPMV():
         self.Explain3=tk.Label(self.MultiFrame,text='Plot Marker').grid(row=1,column=3)
         self.Explain4=tk.Label(self.MultiFrame,text='Plot Color').grid(row=1,column=4)
         self.Explain5=tk.Label(self.MultiFrame,text='Legend Name').grid(row=1,column=5)
+        
+    def Create_MultiPlotDataSettingsFrame(self,MasterTK,row,column):
+        
+        #give starting off button image
+        Off=Image.open('off.png')
+        OffPic=ImageTk.PhotoImage(Off)
+        
+        #create frame
+        self.MultiDataFrame=tk.LabelFrame(MasterTK,text='Additional Data Settings')
+        self.MultiDataFrame.grid(row=row,column=column)
+        
+        ###normalize data settings
+        #Normalization Toggle Label and Button
+        self.NormalizeLabel=tk.Label(self.MultiDataFrame,text='Normalize data')
+        self.NormalizeLabel.grid(row=0,column=0)
+        
+        self.NormalToggle=tk.BooleanVar()
+        self.NormalToggle.set(False)
+        
+        self.NormalButton=tk.Button(self.MultiDataFrame,image=OffPic,bd=0,command=lambda: bt.SwitchButton(self.NormalButton, self.NormalToggle))
+        self.NormalButton.image=OffPic
+        self.NormalButton.grid(row=0,column=1)
+        
+        #Normalization x value
+        self.NormalXLabel=tk.Label(self.MultiDataFrame,text='Normalization at X value: ')
+        self.NormalXLabel.grid(row=1,column=0)
+        
+        self.NormalXValue=tk.IntVar()
+        self.NormalXValue.set(300)
+        
+        self.NormalXInput=tk.Entry(self.MultiDataFrame,textvariable=self.NormalXValue)
+        self.NormalXInput.grid(row=1,column=1)
+        
+        
+        
+        
         
         
         

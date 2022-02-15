@@ -337,7 +337,7 @@ def Job_FindRowSkip(SearchFile,String):
     with open(SearchFile,'r') as File:
         for row in File:
             if String in row:
-                print(row_number)
+                #print(row_number)
                 found_row=row_number
             
             row_number+=1

@@ -597,4 +597,26 @@ def Empty_Plot(MasterTK):
     
     return canvas,fig,ax,toolbarFrame
 
+def SwitchButton(ButtonTK,ToggleTK):
+    
+    #give on and off button images
+    On=Image.open('on.png')
+    OnPic=ImageTk.PhotoImage(On)
+    
+    Off=Image.open('off.png')
+    OffPic=ImageTk.PhotoImage(Off)
+    
+    #switch toggle depending on current state
+    toggle=ToggleTK.get()
+    
+    if toggle:
+        ButtonTK.config(image=OffPic,fg='grey')
+        ButtonTK.image=OffPic
+        ToggleTK.set(False)
+    else:
+        ButtonTK.config(image=OnPic,fg='green')
+        ButtonTK.image=OnPic
+        ToggleTK.set(True)
+    
+
 
